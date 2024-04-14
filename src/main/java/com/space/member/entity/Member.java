@@ -1,0 +1,108 @@
+package com.space.member.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.space.member.constant.Area;
+import com.space.member.constant.Role;
+import com.space.member.dto.MemberFormDto;
+import com.space.member.dto.OauthAddInfoDto;
+import com.space.utils.entity.BaseEntity;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@DynamicUpdate
+@Table(name="member")
+@Getter @Setter
+@NoArgsConstructor
+@ToString
+public class Member extends BaseEntity {
+    @Id
+    @Column(name="member_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    @Column(name="member_name")
+    private String name;
+
+    // 회원은 이메일을 통해 유일하게 구분해야 하기 때문에, 동일한 값이 DB에 저장할 수 없도록 unique 속성 지정한다.
+    @Column(unique = true, name="member_email")
+    private String email;
+    
+    @Column(name="member_password")
+    private String password;
+    
+    // 분야
+    @Enumerated(EnumType.STRING)
+    @Column(name="member_area")
+    private Area area;
+    
+    // 포그 주소
+    @Column(unique = true, name="member_fogid")
+    private String fogid;
+
+    // enum 타입은 기본적으로 순서가 저장되는데 순서가 바뀌면 문제가 생기므로 STRING 옵션 설정한다.
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+    // OAuth로그인 서비스 제공자
+    private String provider;
+    
+    @Column(unique = true)
+    // OAuth로그인한 내 계정에 대한 Id
+    private String providerId;
+
+    // 프로필 사진
+    private String image;
+    
+    // 공개 여부
+    @Column(name="member_allPublicYn")
+    private String allPublicYn;
+    
+//    @OneToMany(mappedBy = "member")
+//    private List<Cash> cashs = new ArrayList<>();
+
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+        Member member = new Member();
+        member.setName(memberFormDto.getName());
+        member.setEmail(memberFormDto.getEmail());
+        member.setArea(memberFormDto.getArea());
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
+        member.setPassword(password);
+        member.setRole(Role.ADMIN);
+        member.setImage(memberFormDto.getImage());
+        return member;
+    }
+    
+    public void addInfoOAuth2(OauthAddInfoDto addInfoDto) {
+    	this.area = addInfoDto.getArea();
+    	this.fogid = addInfoDto.getFogid();
+    }
+     
+    @Builder
+	public Member(String email, String password, Role role, String provider, String providerId,String name, int cash, int level, int point,String image,String allPublicYn) {
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.name = name;
+		this.image = image;
+		this.allPublicYn = allPublicYn;
+	}
+    
+}
