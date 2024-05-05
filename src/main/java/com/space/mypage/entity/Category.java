@@ -40,18 +40,29 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-    
-    
+
+    public Category(String type) {
+        this.type = type;
+    }
+
     // 카테고리 생성 메소드
     public static List<Category> createCategory() {
     	String [] deType = {"프로필","프로젝트","대외활동","수상자격 / 자격증", "보유기술"};
     	List<Category> categorys = new ArrayList<Category>();
-    	
+
+        /*
     	for (int i = 0; i < deType.length; i++) {
     		Category category = new Category();
         	category.setType(deType[i]);
         	categorys.add(category);
 		}
+		*/
+
+        for (String type : deType) {
+            Category category = new Category(type);
+            categorys.add(category);
+        }
+
     	
     	return categorys;
     }
