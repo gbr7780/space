@@ -3,3 +3,4 @@
 
 - 04.14 - spring profile 적용
 - 04.14 - 프로젝트 생성
+- 05.06 - GlobalException(전역 예외 처리) 적용
