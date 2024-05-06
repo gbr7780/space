@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.space.member.constant.Sgg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -91,6 +92,10 @@ public class MypageController {
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
+
+		// 관심분야 및 지역
+		model.addAttribute("local", Area.values());
+		model.addAttribute("sgg", Sgg.values());
 
 		int counts = 0;
 		for (int i = 0; i < lists.size(); i++) {
@@ -387,6 +392,36 @@ public class MypageController {
 		categoryContentService.saveContent(principalDetails, content, category_id);
 
 		return "redirect:/myPage/main";
+	}
+
+	/**
+	 * 24.05.07 KJH
+	 * 취업 관리
+	 * @param principalDetails
+	 * @param model
+	 * @return mypageJob.html
+	 */
+	@GetMapping("/job")
+	public String mypageJob(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
+		Long id = principalDetails.getMember().getId();
+		Member member = memberRepository.findMemberById(id);
+		model.addAttribute("member", member);
+		return "/myPage/mypageJob";
+	}
+
+	/**
+	 * 24.05.07 KJH
+	 * 외부 스페이스
+	 * @param principalDetails
+	 * @param model
+	 * @return mypageExternal.html
+	 */
+	@GetMapping("/external")
+	public String mypageExternal(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
+		Long id = principalDetails.getMember().getId();
+		Member member = memberRepository.findMemberById(id);
+		model.addAttribute("member", member);
+		return "/myPage/mypageExternal";
 	}
 
 	// ckeditor 이미지 처리

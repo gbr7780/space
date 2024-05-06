@@ -112,15 +112,23 @@
 							
 							
 							<div class="form-group mb-4" >
-								  <label class="label" th:for="fogid">스페이스 주소</label>
+								  <label class="label" th:for="fogid" style="font-weight: bold">스페이스 주소</label>
 								  <input type="text" class="form-control" th:field="*{fogid}" placeholder="구분할 수 있는 스페이스 주소를 입력해주세요.">
 								  <br>
-								  <label class="label" th:for="area" style="margin-bottom: 6px">관심 분야</label>
+								  <label class="label" th:for="area" style="margin-bottom: 6px;font-weight: bold">관심 분야</label>
 								  <br>
 								  <select class="form-select " th:field="*{area}" aria-label="Default select example" style="padding-top:5px;width: 400px;height: 35px">
 									<option value="">분야</option>
 									<option th:each="area : ${local}" th:value="${area}" th:text="${area}"></option>
 								  </select>
+								<br>
+								<br>
+								<label class="label" th:for="area" style="margin-bottom: 6px;font-weight: bold">취업 희망 지역</label>
+								<br>
+								<select class="form-select " th:field="*{area}" aria-label="Default select example" style="padding-top:5px;width: 400px;height: 35px">
+									<option value="">지역</option>
+									<option th:each="sgg : ${sgg}" th:value="${sgg}" th:text="${sgg}"></option>
+								</select>
 							</div>
 							
 							<div class="d-flex mb-4 align-items-center">

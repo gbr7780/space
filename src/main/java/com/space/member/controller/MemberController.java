@@ -1,5 +1,6 @@
 package com.space.member.controller;
 
+import com.space.member.constant.Sgg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,6 +58,7 @@ public class MemberController {
 	public String addInfo(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		model.addAttribute("oauthAddInfoDto", new OauthAddInfoDto());
 		model.addAttribute("local", Area.values());
+		model.addAttribute("sgg", Sgg.values());
 		return "member/memberAddInfo";
 	}
 
