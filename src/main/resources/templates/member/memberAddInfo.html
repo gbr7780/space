@@ -19,8 +19,8 @@
 	
 	<style>
 		.form-group label {
-			font-family: Poppins-Bold;
-			font-size: 14px;
+			font-family: 'Poppins-Bold';
+			font-size: 18px;
 			color: #333333;
 			line-height: 1.5;
 		}
@@ -92,7 +92,7 @@
     
 </head>
 
-<body style="background-color:#EBF7FD;">
+<body style="background-color:#023476;">
 	<section class="ftco-section" >
 		<div class="container">
 			 <!--  <div class="row justify-content-center">
@@ -112,12 +112,12 @@
 							
 							
 							<div class="form-group mb-4" >
-								  <label class="label" th:for="fogid">포그 주소</label>
-								  <input type="text" class="form-control" th:field="*{fogid}" placeholder="구분할 수 있는 포그 주소를 입력해주세요.">
+								  <label class="label" th:for="fogid">스페이스 주소</label>
+								  <input type="text" class="form-control" th:field="*{fogid}" placeholder="구분할 수 있는 스페이스 주소를 입력해주세요.">
 								  <br>
-								  <label class="label" th:for="area" style="margin-bottom: 15px">분야</label>
+								  <label class="label" th:for="area" style="margin-bottom: 6px">관심 분야</label>
 								  <br>
-								  <select class="form-select " th:field="*{area}" aria-label="Default select example" style="padding-top:5px">
+								  <select class="form-select " th:field="*{area}" aria-label="Default select example" style="padding-top:5px;width: 400px;height: 35px">
 									<option value="">분야</option>
 									<option th:each="area : ${local}" th:value="${area}" th:text="${area}"></option>
 								  </select>
@@ -126,7 +126,7 @@
 							<div class="d-flex mb-4 align-items-center">
 								<label class="control control--checkbox mb-0">
 									<input type="checkbox" id="agree" />
-									<span class="caption">포그 이용약관, 개인정보 수집 및 서비스 이용약관에&nbsp&nbsp 모두 동의합니다.</span>
+									<span class="caption">스페이스 이용약관, 개인정보 수집 및 서비스 이용약관에&nbsp 모두 동의합니다.</span>
 								</label>
 							</div>
 							

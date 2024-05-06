@@ -2,6 +2,7 @@ package com.space.config.oauth;
 
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,6 +24,7 @@ import com.space.mypage.entity.Category;
 import com.space.mypage.service.CategoryContentService;
 
 @Service
+@Slf4j
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	
 	@Autowired
@@ -78,8 +80,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		
 		// DB에 회원이 없을때 강제가입
 		if(memberEntity == null) {
-			System.out.println("OAuth2 로그인이 최초입니다.");
-			System.out.println("자동회원가입이 진행됩니다.");
+			log.info("OAuth2 로그인이 최초입니다.");
+			log.info("자동회원가입이 진행됩니다.");
 			memberEntity = Member.builder()
 					.email(email)
 					.password(password)

@@ -16,101 +16,103 @@
 	crossorigin="anonymous">
 
 <style>
-.menuLeft {
-	list-style-type: none;
-	padding: 0px;
-	margin: 0px;
-	width: 400px;
-	background: #EBF7FD;
-	height: 100%;
-	overflow: auto;
-	position: fixed;
-}
+	.menuLeft {
+		list-style-type: none;
+		padding: 0px;
+		margin: 0px;
+		width: 400px;
+		background: #023476;
+		height: 100%;
+		overflow: auto;
+		position: fixed;
+	}
 
-ul {
-	list-style: none; /* 점 없애기 */
-	margin-right: 20px;
-	width: 370px;
-	font-size: 20px;
-}
+	ul {
+		list-style: none; /* 점 없애기 */
+		margin-right: 20px;
+		width: 370px;
+		font-size: 20px;
+	}
 
-li {
-	border: 1px solid #094B80;
-	margin-bottom: 10px;
-	background-color: #BFDDF9;
-	font-weight: bold;
-}
+	li {
+		border: 1px solid #094B80;
+		margin-bottom: 10px;
+		background-color: #FFFFFF;
+		font-weight: bold;
+	}
 
-li a {
-	text-decoration: none;
-	padding: 10px;
-	text-align: center;
-	display: block;
-	color: #000;
-	font-weight: bold;
-}
+	li a {
+		text-decoration: none;
+		padding: 10px;
+		text-align: center;
+		display: block;
+		color: #023476;
+		font-weight: bold;
+	}
 
-li a:hover { /* 마우스 갖다 대면 */
-	color: white;
-	background-color: #094B80;
-}
+	li a:hover { /* 마우스 갖다 대면 */
+		text-decoration-line: none;
+	}
 
-.cd1 {
-	margin-left: 220px;
-}
+	.cd1 {
+		margin-left: 220px;
+	}
 
-/* 글쓰기 페이지*/
-.btn-fog {
-	background-color: #BFDDF9;
-	color: black;
-	border-color: #094B80;
-	font-size: 19px;
-}
 
-.btn-fog:hover {
-	color: black;
-	background-color: #BFDDF9;
-	border-color: #094B80;
-	justify-content: space-between;
-}
+	.btn-fog {
+		background-color: #023476;
+		color: white;
+		border-color: #094B80;
+		font-size: 19px;
+	}
 
-.fogTitle { /*말줄임표*/
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
+	.btn-fog:hover {
+		color: white;
+		border-color: #094B80;
+		justify-content: space-between;
+	}
 
-/*검색창*/
-.search {
-	position: relative;
-	width: 200px;
-}
+	.leftMenu {
+		margin-bottom: 15px;
+	}
 
-.search_text {
-	width: 100%;
-	border: 1px solid #bbb;
-	border-radius: 8px;
-	padding: 10px 12px;
-	font-size: 14px;
-}
+	.fogTitle { /*말줄임표*/
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-.search_img {
-	position: absolute;
-	width: 17px;
-	top: 10px;
-	right: 12px;
-	margin: 0;
-}
+	/*검색창*/
+	.search {
+		position: relative;
+		width: 200px;
+	}
 
-/* ckeditor */
-.ck.ck-editor {
-	max-width: 799px;
-}
+	.search_text {
+		width: 100%;
+		border: 1px solid #bbb;
+		border-radius: 8px;
+		padding: 10px 12px;
+		font-size: 14px;
+	}
 
-.ck-editor__editable {
-	min-height: 480px;
-	max-height:480px;
-}
+	.search_img {
+		position: absolute;
+		width: 17px;
+		top: 10px;
+		right: 12px;
+		margin: 0;
+	}
+
+	/* ckeditor */
+	.ck.ck-editor {
+		max-width: 799px;
+	}
+
+	.ck-editor__editable {
+		min-height: 480px;
+		max-height:480px;
+	}
 </style>
 
 <!-- 사용자 스크립트 추가 -->
@@ -130,31 +132,30 @@ li a:hover { /* 마우스 갖다 대면 */
 <div th:fragment="header">
 	<div class="menuLeft">
 		<div
-			style="border: 1px solid #094B80; background-color: white; float: center; height: 320px; width: 340px; margin-right: 15px; margin-left: 30px; margin-top: 30px; text-align: center;">
+				style="border: 1px solid #094B80; background-color: white; float: center; height: 320px; width: 340px; margin-right: 15px; margin-left: 30px; margin-top: 30px; text-align: center;">
 			<img th:src="${member.image} != null ? ${member.image} : @{/img/포그.png}" alt="fog"
-				style="margin-top: 10px; width: 300px; height: 300px; object-fit: cover; border-radius: 30%; overflow: hidden;">
+				 style="margin-top: 10px; width: 300px; height: 300px; object-fit: cover; border-radius: 30%; overflow: hidden;">
 
 		</div>
 		<div
-			style="border: 1px solid #094B80; background-color: white; float: center; height: 70px; width: 340px; margin-right: 15px; margin-left: 30px; text-align: center; margin-bottom: 5px">
+				style="border: 1px solid #094B80; background-color: white; float: center; height: 70px; width: 340px; margin-right: 15px; margin-left: 30px; text-align: center; margin-bottom: 5px">
 
 			<h5 th:text="${member.name}"
-				style="float: left; margin-left: 20px; margin-bottom: 0px; margin-top: 10px; color: black;">스누피</h5>
-			<br> <a th:href="'http://localhost/fog/' + ${member.fogid}"
-				th:text="'http://localhost/fog/' + ${member.fogid}"
-				style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -60px; color: black">http://localhost/fog/snoppy</a>
+				style="float: left; margin-left: 20px; margin-bottom: 0px; margin-top: 10px; color: #023476; font-weight: bold;">스누피</h5>
+			<br>
+			<a th:href="'/fog/' + ${member.fogid}"
+			   th:text="'http://localhost:8080/fog/' + ${member.fogid}"
+			   style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -50px; color: #023476">http://localhost/fog/snoppy</a>
 			<!-- th:href="@{http://localhost/fog/{id}(id = ${member.fogid})}" -->
 		</div>
 		<Br>
-		<Br>
 
 		<ul>
-			<li><a class="home" href="../mypage/write">작성하기</a></li>
-			<br>
-			<li><a href="../mypage/category">카테고리 관리</a></li>
-			<li><a href="../mypage/fogEdit">포그 관리</a></li>
-			<li><a href="../mypage/main">방문자 통계</a></li>
-			<li><a href="../mypage/setting">설정</a></li>
+			<li><a class="home" href="../mypage/write">작성하기</a></li><br><br>
+			<li class="leftMenu"><a  href="../mypage/category">카테고리 관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/fogEdit">스페이스 관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/main">방문자 통계</a></li>
+			<li class="leftMenu"><a  href="../mypage/setting">설정</a></li>
 		</ul>
 	</div>
 </div>
@@ -167,7 +168,7 @@ li a:hover { /* 마우스 갖다 대면 */
 			<Br>
 			<h2 style="font-weight: bold; margin-left: 200px;">작성하기</h2>
 			<div
-				style="border: 1px solid #094B80; background-color: white; float: center; height: 750px; width: 850px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
+				style="border: 1px solid #094B80; background-color: white; float: center; height: 715px; width: 850px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
 				<form class="signup-form" th:object="${categoryWriteDto}"
 					action="/mypage/write" role="form" method="post" name="join_form"
 					enctype="multipart/form-data">
@@ -205,19 +206,19 @@ li a:hover { /* 마우스 갖다 대면 */
 
 					<div style="float: left; width: 50%; margin-top: 0px;">
 						<div
-							style="text-align: left; margin-left: 40px; margin-top: 15px; font-size: 20px; font-weight: bold; margin-bottom: 5px">공개여부</div>
+							style="text-align: left; margin-left: 40px; margin-top: 15px; font-size: 20px; font-weight: bold; margin-bottom: 5px"></div>
 					</div>
 
 					<div
-						style="float: right; width: 50%; margin-top: 30px; text-align: right;">
+						style="float: right; width: 50%; margin-top: 10px; text-align: right;">
 						<button type="button" class="btn btn-fog" onClick="formCheck()"
-							style="width: 120px; float: right; margin-right: 30px;">저&nbsp;장</button>
+							style="width: 120px; float: right; margin-right: 30px;">저장</button>
 					</div>
 					<!-- 공개여부 -->
 					<div style="width: 50%; margin-top: 10px; text-align: left;">
 						<input class="form-check-input" type="radio" name="radio" id="flexRadioDefault1" value="Y" style="margin-left: 40px;" checked> 
 							<label class="form-check-label"
-							for="flexRadioDefault1" style="margin-left: 65px;"> 공개 </label> 
+							for="flexRadioDefault1" style="margin-left: 65px;"> 공개(기본) </label>
 							<input class="form-check-input" type="radio" name="radio" id="flexRadioDefault2" value="N" style="margin-left: 20px;">
 						<label class="form-check-label" for="flexRadioDefault2"
 							style="margin-left: 45px;">비공개</label>
@@ -287,5 +288,7 @@ function formCheck(){
 
 </script>
 </div>
+	<!--
 <div th:replace="fragments/mypageFooter::footer"></div>
+-->
 </html>
