@@ -210,6 +210,7 @@
 								th:text="${vo.title}">포그타이틀</div>
 						</div>
 
+						<!--
 						<div style="float: left; width: 30%; margin-top: 5px;">
 						<a href="/mypage/fogEdit/update/" th:attrappend="href=${vo.id}">
 							<button type="button" class="btn btn-fog"
@@ -219,13 +220,23 @@
 							<button type="button" class="btn btn-fog" style="width: 100px;"
 								onclick="alert('포그가 삭제되었습니다.');">삭&nbsp;제</button></a>
 						</div>
+						-->
 						<br> <Br>
 						<hr style="color: #094B80;">
 					</div>
 				</div>
 				<br>
+
+
+
 			</div>
+			<a href="/mypage/write">
+				<button type="button" class="btn btn-fog" style="width: 120px;float: right;margin-right: 76px;margin-top : 5px" >작성</button>
+			</a>
+			<button type="button" class="btn btn-fog" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px" >삭제</button>
+			<button type="button" class="btn btn-fog" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px" >일괄수정</button>
 			<br> <br>
+			<!--
 			<div style="float: right; margin-right: 0px;">
 				<nav aria-label="Page navigation example">
 					<ul class="pagination" style="margin-right: 70px; width: 210px;">
@@ -246,6 +257,7 @@
 					</ul>
 				</nav>
 			</div>
+			-->
 			<br> <br>
 		</div>
 	</div>

@@ -41,32 +41,32 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-		System.out.println("getClientRegistration : " + userRequest.getClientRegistration()); // registrationId로 어떤
-		System.out.println("getAccessToken : " + userRequest.getAccessToken().getTokenValue());
+		log.info("getClientRegistration : " + userRequest.getClientRegistration()); // registrationId로 어떤
+		log.info("getAccessToken : " + userRequest.getAccessToken().getTokenValue());
 
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 		// 구글로그인 버튼 클릭 -> 구글로그인 창 -> 로그인을 완료 -> code를 리턴(OAuth-Client라이브러리) -> AccessToken요청
 		// userRequest정보 -> loadUser함수 호출 -> 구글로부터 회원프로필 받아준다.
-		System.out.println("getAttributes : " + oAuth2User.getAttributes());
+		log.info("getAttributes : " + oAuth2User.getAttributes());
 		
 		// 회원가입 강제로 함
 		OAuth2UserInfo oauth2UserInfo = null;
 		if(userRequest.getClientRegistration().getRegistrationId().equals("google")) {
-			System.out.println("구글 로그인 요청입니다.");
+			log.info("구글 로그인 요청입니다.");
 			oauth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
 		} else if(userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
-			System.out.println("카카오 로그인 요청입니다.");
+			log.info("카카오 로그인 요청입니다.");
 			oauth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
 		} else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
-			System.out.println("페이스북 로그인 요청입니다.");
+			log.info("페이스북 로그인 요청입니다.");
 			oauth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
 		} 
 		else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
-			System.out.println("네이버 로그인 요청입니다.");
+			log.info("네이버 로그인 요청입니다.");
 			oauth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
 		}
 		else  {
-			System.out.println("구글,카카오,네이버,페이스북만 지원합니다!");
+			log.info("구글,카카오,네이버,페이스북만 지원합니다!");
 		}
 		
 		String provider = oauth2UserInfo.getProvider(); // google
@@ -95,7 +95,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			memberRepository.save(memberEntity);	
 			categoryContentService.createCategory(Category.createCategory(), memberEntity);		// 회원가입시 카테고리 생성
 		} else {
-			System.out.println("OAuth2 로그인한 적이 있습니다. 자동회원가입이 되어있습니다.");
+			log.info("OAuth2 로그인한 적이 있습니다. 자동회원가입이 되어있습니다.");
 		}
 		
 		

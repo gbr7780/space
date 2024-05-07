@@ -3,6 +3,7 @@ package com.space.fog.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryController {
 
 	@Autowired
@@ -50,8 +52,8 @@ public class CategoryController {
 	public String fogMain(@PathVariable("fogid") String fogid, Model model,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, HitCount hitcount) {
 		model.addAttribute("fogid", fogid);
-		System.out.println(">>>>>>>>>>>> fogId : " + fogid);
-
+		log.info(">>>>>>>>>>>> fogId : " + fogid);
+		
 		// 현재 로그인한 정보
 		Long memid = principalDetails.getMember().getId();
 		Member memMember = memberRepository.findMemberById(memid);
@@ -69,14 +71,14 @@ public class CategoryController {
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
 
-		System.out.println(">>>>>>>>>>>> 현재로그인한 fog ID : " + memMember.getFogid());
-		System.out.println(">>>>>>>>>>>> 계정 fog ID : " + fogid);
+		log.info(">>>>>>>>>>>> 현재로그인한 fog ID : " + memMember.getFogid());
+		log.info(">>>>>>>>>>>> 계정 fog ID : " + fogid);
 
-		System.out.println(">>>>>>>>>>>> 공개여부 : " + member.getAllPublicYn());
+		log.info(">>>>>>>>>>>> 공개여부 : " + member.getAllPublicYn());
 
 		// 조회수 증가
 		countService.hitCountSave(fogid, "날짜", hitcount);
-		System.out.println("조회수 증가");
+		log.info("조회수 증가");
 
 		// 카테고리 출력
 		List<Category> lists = categoryRepository.findAll();
@@ -150,7 +152,7 @@ public class CategoryController {
 	public String mypageHeader(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		String fogId = principalDetails.getMember().getFogid();
 		model.addAttribute("fogid", fogId);
-		System.out.println(">>>>>>>>>>>>>> fogId" + fogId);
+		log.info(">>>>>>>>>>>>>> fogId" + fogId);
 		return "fragments/mypageHeader";
 	}
 }

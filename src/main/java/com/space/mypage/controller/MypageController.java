@@ -12,6 +12,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import com.space.member.constant.Sgg;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,6 +49,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/mypage")
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class MypageController {
 
@@ -177,9 +180,9 @@ public class MypageController {
 	// 마이페이지 - 카테고리 수정
 	@PostMapping("/category/update")
 	public String mypageCategoryPost(CategoryUpdateDto categoryUpdateDto, Model model) {
-//		System.out.println("-=============== 카테고리 관리 POST : " + categoryUpdateDto);
-//		System.out.println("-=============== 카테고리 Id : " + categoryUpdateDto.getId());
-//		System.out.println("-=============== 카테고리 Type : " + categoryUpdateDto.getType());
+//		log.info("-=============== 카테고리 관리 POST : " + categoryUpdateDto);
+//		log.info("-=============== 카테고리 Id : " + categoryUpdateDto.getId());
+//		log.info("-=============== 카테고리 Type : " + categoryUpdateDto.getType());
 
 		Long id = categoryUpdateDto.getId();
 		String type = categoryUpdateDto.getType();
@@ -235,7 +238,7 @@ public class MypageController {
 	// 마이페이지 - 포그 삭제
 	@GetMapping(value = "/fogEdit/delete/{id}")
 	public String fogDelete(@PathVariable("id") Long id) {
-		System.out.println(">>>>>>>>>>  포그 삭제 컨트롤러 접근");
+		log.info(">>>>>>>>>>  포그 삭제 컨트롤러 접근");
 		categoryContentService.deletefog(id);
 		return "redirect:mypage/fogEdit";
 	}
@@ -259,10 +262,10 @@ public class MypageController {
 			MemberUpdateDto memberUpdateDto, HttpServletRequest request, Model model,
 			@RequestParam(value = "radio", required = false) String radio) throws Exception {
 
-//		System.out.println("===============>name : " + memberUpdateDto.getName());
-//		System.out.println("===============>getAllPublicYn : " + memberUpdateDto.getAllPublicYn());
-//		System.out.println("===============>Area : " + memberUpdateDto.getArea());
-//		System.out.println("===============>Filename : " + memberUpdateDto.getFilename());
+//		log.info("===============>name : " + memberUpdateDto.getName());
+//		log.info("===============>getAllPublicYn : " + memberUpdateDto.getAllPublicYn());
+//		log.info("===============>Area : " + memberUpdateDto.getArea());
+//		log.info("===============>Filename : " + memberUpdateDto.getFilename());
 
 		memberUpdateDto.setAllPublicYn(radio);
 		Long id = principalDetails.getMember().getId();
@@ -387,11 +390,11 @@ public class MypageController {
 			@RequestParam(value = "radio", required = false) String radio) {
 		categoryWriteDto.setCategoryYn(radio);
 		String category_id = categoryWriteDto.getCategory();
-//		System.out.println(">>>>>>>>>>>>>>> id" + category_id);
+//		log.info(">>>>>>>>>>>>>>> id" + category_id);
 		CategoryContent content = CategoryContent.createContent(categoryWriteDto);
 		categoryContentService.saveContent(principalDetails, content, category_id);
 
-		return "redirect:/myPage/main";
+		return "redirect:/mypage/fogEdit";
 	}
 
 	/**

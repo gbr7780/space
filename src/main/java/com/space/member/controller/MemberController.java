@@ -1,6 +1,7 @@
 package com.space.member.controller;
 
 import com.space.member.constant.Sgg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/members")
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -75,11 +77,11 @@ public class MemberController {
 	@ResponseBody
 	public String testLogin(Authentication authentication,
 			@AuthenticationPrincipal PrincipalDetails principalDetails2) {
-		System.out.println("/test/login ===============");
+		//log.info("/test/login ===============");
 		// PrincipalDetail
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		System.out.println("authentication : " + principalDetails.getMember());
-		System.out.println("userDetails : " + principalDetails2.getMember());
+		log.info("authentication : " + principalDetails.getMember());
+		log.info("userDetails : " + principalDetails2.getMember());
 		return "세션 정보 확인하기";
 	}
 
@@ -87,10 +89,10 @@ public class MemberController {
 	@GetMapping("/test/oauth/login")
 	@ResponseBody
 	public String testLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oauth) {
-		System.out.println("/test/oauth/login ===============");
+		//log.info("/test/oauth/login ===============");
 		OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-		System.out.println("authentication : " + oAuth2User.getAttributes());
-		System.out.println("OAuth2User : " + oauth.getAttributes());
+		log.info("authentication : " + oAuth2User.getAttributes());
+		log.info("OAuth2User : " + oauth.getAttributes());
 
 		return "OAuth 세션 정보 확인하기";
 	}
