@@ -116,4 +116,9 @@ public class MemberService implements UserDetailsService {
 		}
 	}
 
+
+	public Long spaceIdCheck(String spaceId) {
+		return memberRepository.countBySpaceId(spaceId);
+	}
+
 }

@@ -81,12 +81,12 @@ public class MypageController {
 	@GetMapping("/main")
 	public String mypageMain(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 		// 방문자 통계
-		String spaceId = principalDetails.getMember().getSpaceid();
+		String spaceId = principalDetails.getMember().getSpaceId();
 		List<HitCount> lists = countService.countList();
 		model.addAttribute("lists", lists);
 		model.addAttribute("spaceId", spaceId);
 
-		String memSpaceId = principalDetails.getMember().getSpaceid();
+		String memSpaceId = principalDetails.getMember().getSpaceId();
 		model.addAttribute("memSpaceId", memSpaceId);
 
 		String name = principalDetails.getMember().getName();
@@ -115,7 +115,7 @@ public class MypageController {
 	@GetMapping("/category")
 	public String mypageCategory(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 		// 스페이스 이름
-		String spaceId = principalDetails.getMember().getSpaceid();
+		String spaceId = principalDetails.getMember().getSpaceId();
 		model.addAttribute("spaceId", spaceId);
 
 		// 로그인한 사용자 ID
@@ -140,7 +140,7 @@ public class MypageController {
 	@GetMapping("/category/update")
 	public String mypageCategoryUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 		// 스페이스 이름
-		String spaceId = principalDetails.getMember().getSpaceid();
+		String spaceId = principalDetails.getMember().getSpaceId();
 		model.addAttribute("spaceId", spaceId);
 
 		// 로그인한 사용자 ID
@@ -195,7 +195,7 @@ public class MypageController {
 	@GetMapping("/spaceEdit")
 	public String mypageSpaceEdit(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
-		String spaceId = principalDetails.getMember().getSpaceid();
+		String spaceId = principalDetails.getMember().getSpaceId();
 		model.addAttribute("spaceId", spaceId);
 
 		String name = principalDetails.getMember().getName();
@@ -305,7 +305,7 @@ public class MypageController {
 	// 마이페이지 - 작성하기
 	@GetMapping("/write")
 	public String mypageWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-		// String spaceId = principalDetails.getMember().getSpaceid();
+		// String spaceId = principalDetails.getMember().getSpaceId();
 		// model.addAttribute("spaceId", spaceId);
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);

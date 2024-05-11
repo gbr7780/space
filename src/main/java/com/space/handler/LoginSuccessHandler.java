@@ -34,7 +34,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 			Area area = principalDetails.getMember().getArea();
-			String spaceUrl = principalDetails.getMember().getSpaceid();
+			String spaceUrl = principalDetails.getMember().getSpaceId();
 			
 			if(area != null) {
 				response.sendRedirect("/space/"+spaceUrl+"");

@@ -48,11 +48,11 @@ public class CategoryController {
 	private final HitCountService countService;
 
 	// 스페이스 메인페이지
-	@GetMapping("/space/{spaceid}")
-	public String spaceMain(@PathVariable("spaceid") String spaceid, Model model,
+	@GetMapping("/space/{spaceId}")
+	public String spaceMain(@PathVariable("spaceId") String spaceId, Model model,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, HitCount hitcount) {
-		model.addAttribute("spaceid", spaceid);
-		log.info(">>>>>>>>>>>> spaceId : " + spaceid);
+		model.addAttribute("spaceId", spaceId);
+		log.info(">>>>>>>>>>>> spaceId : " + spaceId);
 		
 		// 현재 로그인한 정보
 		Long memid = principalDetails.getMember().getId();
@@ -63,7 +63,7 @@ public class CategoryController {
 		List<Member> list = memberRepository.findAll();
 		Long id = (long) 0; // 스페이스의 공개여부
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getSpaceid().equals(spaceid)) {
+			if (list.get(i).getSpaceId().equals(spaceId)) {
 				id = list.get(i).getId();
 			}
 		}
@@ -71,13 +71,13 @@ public class CategoryController {
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
 
-		log.info(">>>>>>>>>>>> 현재로그인한 space ID : " + memMember.getSpaceid());
-		log.info(">>>>>>>>>>>> 계정 space ID : " + spaceid);
+		log.info(">>>>>>>>>>>> 현재로그인한 space ID : " + memMember.getSpaceId());
+		log.info(">>>>>>>>>>>> 계정 space ID : " + spaceId);
 
 		log.info(">>>>>>>>>>>> 공개여부 : " + member.getAllPublicYn());
 
 		// 조회수 증가
-		countService.hitCountSave(spaceid, "날짜", hitcount);
+		countService.hitCountSave(spaceId, "날짜", hitcount);
 		log.info("조회수 증가");
 
 		// 카테고리 출력
@@ -150,8 +150,8 @@ public class CategoryController {
 	// 마이페이지 - 헤더
 	@GetMapping("/space")
 	public String mypageHeader(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-		String spaceId = principalDetails.getMember().getSpaceid();
-		model.addAttribute("spaceid", spaceId);
+		String spaceId = principalDetails.getMember().getSpaceId();
+		model.addAttribute("spaceId", spaceId);
 		log.info(">>>>>>>>>>>>>> spaceId" + spaceId);
 		return "fragments/mypageHeader";
 	}

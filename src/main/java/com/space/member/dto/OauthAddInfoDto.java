@@ -14,6 +14,6 @@ public class OauthAddInfoDto {
     
     private String bnumber;
     
-    private String spaceid;
+    private String spaceId;
     
 }

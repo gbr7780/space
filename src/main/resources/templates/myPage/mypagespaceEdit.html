@@ -131,10 +131,10 @@
 			<h5 th:text="${member.name}"
 				style="float: left; margin-left: 20px; margin-bottom: 0px; margin-top: 10px; color: #023476; font-weight: bold;">스누피</h5>
 			<br>
-			<a th:href="'/space/' + ${member.spaceid}"
-			   th:text="'http://localhost:8080/space/' + ${member.spaceid}"
+			<a th:href="'/space/' + ${member.spaceId}"
+			   th:text="'http://localhost:8080/space/' + ${member.spaceId}"
 			   style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -50px; color: #023476">http://localhost/space/snoppy</a>
-			<!-- th:href="@{http://localhost/space/{id}(id = ${member.spaceid})}" -->
+			<!-- th:href="@{http://localhost/space/{id}(id = ${member.spaceId})}" -->
 		</div>
 		<Br>
 

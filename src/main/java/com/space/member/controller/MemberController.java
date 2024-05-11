@@ -68,7 +68,7 @@ public class MemberController {
 	@PostMapping("/login/addInfo")
 	public String addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, OauthAddInfoDto oauthAddInfoDto,Model model) {
 		memberService.addInfo(principalDetails, oauthAddInfoDto);
-		String spaceUrl = oauthAddInfoDto.getSpaceid();
+		String spaceUrl = oauthAddInfoDto.getSpaceId();
 		return "redirect:/space/"+spaceUrl+"";
 	}
 
