@@ -33,7 +33,7 @@ public class Category {
     private Long id;
     
     // 카테고리 종류
-    @Column(unique = true,name="category_type")
+    @Column(name="category_type")
     private String type;
     
     // 다대일 관계 - 외래키(사용자)
