@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="sidebarFragment">
+	<!--sidebar-->
+	<div class="menuLeft">
+		<div style="border: 1px solid #094B80; background-color: white; float: center; height: 320px; width: 340px; margin-right: 15px; margin-left: 30px; margin-top: 30px; text-align: center;">
+			<img th:src="${member.image} != null ? ${member.image} : @{/img/스페이스.png}" alt="space"
+				 style="margin-top: 10px; width: 300px; height: 300px; object-fit: cover; border-radius: 30%; border: solid black; overflow: hidden;">
+
+		</div>
+		<div style="border: 1px solid #094B80; background-color: white; float: center; height: 70px; width: 340px; margin-right: 15px; margin-left: 30px; text-align: center; margin-bottom: 5px">
+
+			<h5 th:text="${member.name}"
+				style="float: left; margin-left: 20px; margin-bottom: 0px; margin-top: 10px; color: #023476; font-weight: bold;">스누피</h5>
+			<br>
+			<a th:href="'/space/' + ${member.spaceId}"
+			   th:text="'http://localhost:8080/space/' + ${member.spaceId}"
+			   style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -50px; color: #023476">http://localhost/space/snoppy</a>
+			<!-- th:href="@{http://localhost/space/{id}(id = ${member.spaceId})}" -->
+		</div>
+		<Br>
+
+		<ul>
+			<li><a class="home" href="../mypage/main">마이페이지</a></li><br><br>
+			<li class="leftMenu"><a  href="../mypage/category">카테고리 관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/spaceEdit">스페이스 관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/job">취업관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/external">외부 스페이스</a></li>
+		</ul>
+	</div>
+</th:block>
+
+</html>
