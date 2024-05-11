@@ -75,13 +75,13 @@ public class CategoryContentService {
 		}
 	}
 
-	// 포그 삭제
-	public void deletefog(Long id) {
+	// 스페이스 삭제
+	public void deletespace(Long id) {
 		categoryContentRepository.deleteById(id);
 	}
 
-	// 포그 수정
-	public CategoryContent fogDetail(Long id) {
+	// 스페이스 수정
+	public CategoryContent spaceDetail(Long id) {
 		Optional<CategoryContent> optional = categoryContentRepository.findById(id);
 		if (optional.isPresent()) {
 			CategoryContent content = optional.get();

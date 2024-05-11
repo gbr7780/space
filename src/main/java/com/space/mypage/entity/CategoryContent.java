@@ -29,11 +29,11 @@ public class CategoryContent {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	// 포그 타이틀
+	// 스페이스 타이틀
 	@Column(name = "title")
 	private String title;
 
-	// 포그 내용
+	// 스페이스 내용
 	@Column(name = "content")
 	private String content;
 

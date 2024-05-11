@@ -68,8 +68,8 @@ public class MemberController {
 	@PostMapping("/login/addInfo")
 	public String addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, OauthAddInfoDto oauthAddInfoDto,Model model) {
 		memberService.addInfo(principalDetails, oauthAddInfoDto);
-		String fogUrl = oauthAddInfoDto.getFogid();
-		return "redirect:/fog/"+fogUrl+"";
+		String spaceUrl = oauthAddInfoDto.getSpaceid();
+		return "redirect:/space/"+spaceUrl+"";
 	}
 
 	// form로그인 테스트

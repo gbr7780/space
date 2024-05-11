@@ -23,7 +23,7 @@ public class HitCountService {
 	
 	// 조회수 증가
 		@Transactional
-		public void hitCountSave(String fogId, String date, HitCount hitcount) { // Member member
+		public void hitCountSave(String spaceId, String date, HitCount hitcount) { // Member member
 			// 현재 날짜 구하기
 	        LocalDate now = LocalDate.now();
 	 
@@ -37,8 +37,8 @@ public class HitCountService {
 	        System.out.println(">>>>>>>>>>>> 오늘 날짜 : " + formatedNow);  // 22-12-09
 	        
 			hitcount.setDate(date); 
-			hitcount.setFogId(fogId); // 내가 본 사용자의 아이디를 넣어야함
-			hitcount.save(fogId, formatedNow); // , member
+			hitcount.setSpaceId(spaceId); // 내가 본 사용자의 아이디를 넣어야함
+			hitcount.save(spaceId, formatedNow); // , member
 			hitCountRepository.save(hitcount);
 		}
 

@@ -50,7 +50,7 @@ public class SecurityConfig {
 //                .csrf().disable()        // 스프링 시큐리티에서는 CSRF공격을 방어하기 위해서 POST방식의 데이터 전송에는 반드시 CSRF토큰이 있어야함
 
                 .loginPage("/members/login")
-                .defaultSuccessUrl("/fog")
+                .defaultSuccessUrl("/space")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .failureUrl("/members/login/error")
@@ -69,7 +69,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
 
-                .mvcMatchers("/css/**","/js/**","/img/**","/video/**","/login/**","/signup/**","/image/title/**","/pay/**", "/pay/charge/**").permitAll()
+                .mvcMatchers("/space/**", "/css/**","/js/**","/img/**","/video/**","/login/**","/signup/**","/image/title/**","/pay/**", "/pay/charge/**").permitAll()
 
                 .mvcMatchers("/", "https://app.gather.town/**", "/market/**", "/members/**","/item/**","/images/**",  "/image/upload/**", "/oauth2/**","/members/login/**", "/mypage/**", "/pay/**","/court/**", "/match/**").permitAll()
 

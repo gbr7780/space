@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title>포그</title>
+<title>스페이스</title>
 
 <!-- 사용자 CSS 추가-->
 <link rel="stylesheet"
@@ -58,14 +58,14 @@
 		margin-left: 220px;
 	}
 
-	.btn-fog {
+	.btn-space {
 		background-color: #023476;
 		color: white;
 		border-color: #094B80;
 		font-size: 19px;
 	}
 
-	.btn-fog:hover {
+	.btn-space:hover {
 		color: white;
 		border-color: #094B80;
 		justify-content: space-between;
@@ -75,7 +75,7 @@
 		margin-bottom: 15px;
 	}
 
-	.fogText { /*말줄임표*/
+	.spaceText { /*말줄임표*/
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -106,7 +106,7 @@
 	<div class="menuLeft">
 		<div
 				style="border: 1px solid #094B80; background-color: white; float: center; height: 320px; width: 340px; margin-right: 15px; margin-left: 30px; margin-top: 30px; text-align: center;">
-			<img th:src="${member.image} != null ? ${member.image} : @{/img/포그.png}" alt="fog"
+			<img th:src="${member.image} != null ? ${member.image} : @{/img/스페이스.png}" alt="space"
 				 style="margin-top: 10px; width: 300px; height: 300px; object-fit: cover; border-radius: 30%; overflow: hidden;">
 
 		</div>
@@ -116,17 +116,17 @@
 			<h5 th:text="${member.name}"
 				style="float: left; margin-left: 20px; margin-bottom: 0px; margin-top: 10px; color: #023476; font-weight: bold;">스누피</h5>
 			<br>
-			<a th:href="'/fog/' + ${member.fogid}"
-			   th:text="'http://localhost:8080/fog/' + ${member.fogid}"
-			   style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -50px; color: #023476">http://localhost/fog/snoppy</a>
-			<!-- th:href="@{http://localhost/fog/{id}(id = ${member.fogid})}" -->
+			<a th:href="'/space/' + ${member.spaceid}"
+			   th:text="'http://localhost:8080/space/' + ${member.spaceid}"
+			   style="text-decoration: none; float: left; font-size: 17px; margin-top: 11px; margin-left: -50px; color: #023476">http://localhost/space/snoppy</a>
+			<!-- th:href="@{http://localhost/space/{id}(id = ${member.spaceid})}" -->
 		</div>
 		<Br>
 
 		<ul>
 			<li><a class="home" href="../mypage/write">작성하기</a></li><br><br>
 			<li class="leftMenu"><a  href="../mypage/category">카테고리 관리</a></li>
-			<li class="leftMenu"><a  href="../mypage/fogEdit">스페이스 관리</a></li>
+			<li class="leftMenu"><a  href="../mypage/spaceEdit">스페이스 관리</a></li>
 			<li class="leftMenu"><a  href="../mypage/main">방문자 통계</a></li>
 			<li class="leftMenu"><a  href="../mypage/setting">설정</a></li>
 		</ul>
@@ -144,7 +144,7 @@
 				style="border: 1px solid #094B80; background-color: white; float: center; height: 650px; width: 800px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
 				
 				<!-- 프로필 사진 -->
- 				<img class="profile" id="image-box" th:src="${member.image} != null ? ${member.image} : @{/img/포그.png}" alt="fog" style="border:1px solid black; margin-top: 30px; width: 215px; height: 215px; object-fit: cover; border-radius: 30%; overflow: hidden;">
+ 				<img class="profile" id="image-box" th:src="${member.image} != null ? ${member.image} : @{/img/스페이스.png}" alt="space" style="border:1px solid black; margin-top: 30px; width: 215px; height: 215px; object-fit: cover; border-radius: 30%; overflow: hidden;">
     
 				<div
 					style="text-align: left; margin-left: 40px; margin-top: 25px; font-size: 20px; font-weight: bold;">프로필
@@ -155,9 +155,9 @@
 					<input type="file" th:field="*{filename}" class="form-control" id="file">
 				</div>
 
-				<!-- 포그 이름 -->
-				<div style="text-align: left; margin-left: 40px; margin-top: 23px; font-size: 20px; font-weight: bold;">포그 이름</div>
-				<br> <input class="fogText" type="text" name="name"
+				<!-- 스페이스 이름 -->
+				<div style="text-align: left; margin-left: 40px; margin-top: 23px; font-size: 20px; font-weight: bold;">스페이스 이름</div>
+				<br> <input class="spaceText" type="text" name="name"
 					style="width: 700px; font-size: 20px; letter-spacing: 4px; text-align: left; margin-left: 45px; float: left; padding: 5px;"
 					th:value="${member.name}"> <br> 
 
@@ -204,7 +204,7 @@
 				<!-- <div
 					style="text-align: left; margin-left: 40px; margin-top: 25px; font-size: 20px; font-weight: bold;">비밀번호
 					변경</div>
-				<br> <input class="fogText" type="password" name="fog_name"
+				<br> <input class="spaceText" type="password" name="space_name"
 					style="width: 700px; font-size: 20px; letter-spacing: 4px; text-align: left; margin-left: 45px; float: left; padding: 5px;"
 					value="12345678">  --><br> <Br>
 
@@ -229,10 +229,10 @@ fileInput.addEventListener("change", handleFiles);
 </script>	
 		</div>
 		<br> <br>
-		<button type="button" class="btn btn-fog" 
+		<button type="button" class="btn btn-space"
 			style="width: 120px; float: right; margin-right: 80px;"
 			onclick="formSubmit()">저&nbsp;장</button>
-		<button type="button" class="btn btn-fog"
+		<button type="button" class="btn btn-space"
 			style="width: 120px; float: right; margin-right: 30px;"
 			onclick="check();">탈&nbsp;퇴</button>
 		<br> <br>

@@ -34,10 +34,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 			Area area = principalDetails.getMember().getArea();
-			String fogUrl = principalDetails.getMember().getFogid();
+			String spaceUrl = principalDetails.getMember().getSpaceid();
 			
 			if(area != null) {
-				response.sendRedirect("/fog/"+fogUrl+"");
+				response.sendRedirect("/space/"+spaceUrl+"");
 			} else {
 				response.sendRedirect("/members/login/addInfo");
 			}

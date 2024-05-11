@@ -1,4 +1,4 @@
-package com.space.fog.controller;
+package com.space.space.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,23 +47,23 @@ public class CategoryController {
 
 	private final HitCountService countService;
 
-	// 포그 메인페이지
-	@GetMapping("/fog/{fogid}")
-	public String fogMain(@PathVariable("fogid") String fogid, Model model,
+	// 스페이스 메인페이지
+	@GetMapping("/space/{spaceid}")
+	public String spaceMain(@PathVariable("spaceid") String spaceid, Model model,
 			@AuthenticationPrincipal PrincipalDetails principalDetails, HitCount hitcount) {
-		model.addAttribute("fogid", fogid);
-		log.info(">>>>>>>>>>>> fogId : " + fogid);
+		model.addAttribute("spaceid", spaceid);
+		log.info(">>>>>>>>>>>> spaceId : " + spaceid);
 		
 		// 현재 로그인한 정보
 		Long memid = principalDetails.getMember().getId();
 		Member memMember = memberRepository.findMemberById(memid);
 		model.addAttribute("memMember", memMember);
 
-		// 포그 계정에 대한 정보
+		// 스페이스 계정에 대한 정보
 		List<Member> list = memberRepository.findAll();
-		Long id = (long) 0; // 포그의 공개여부
+		Long id = (long) 0; // 스페이스의 공개여부
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getFogid().equals(fogid)) {
+			if (list.get(i).getSpaceid().equals(spaceid)) {
 				id = list.get(i).getId();
 			}
 		}
@@ -71,13 +71,13 @@ public class CategoryController {
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
 
-		log.info(">>>>>>>>>>>> 현재로그인한 fog ID : " + memMember.getFogid());
-		log.info(">>>>>>>>>>>> 계정 fog ID : " + fogid);
+		log.info(">>>>>>>>>>>> 현재로그인한 space ID : " + memMember.getSpaceid());
+		log.info(">>>>>>>>>>>> 계정 space ID : " + spaceid);
 
 		log.info(">>>>>>>>>>>> 공개여부 : " + member.getAllPublicYn());
 
 		// 조회수 증가
-		countService.hitCountSave(fogid, "날짜", hitcount);
+		countService.hitCountSave(spaceid, "날짜", hitcount);
 		log.info("조회수 증가");
 
 		// 카테고리 출력
@@ -144,15 +144,15 @@ public class CategoryController {
 		model.addAttribute("conList4", conList4);
 		model.addAttribute("conList5", conList5);
 
-		return "fog/fogMain";
+		return "space/spaceMain";
 	}
 
 	// 마이페이지 - 헤더
-	@GetMapping("/fog")
+	@GetMapping("/space")
 	public String mypageHeader(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-		String fogId = principalDetails.getMember().getFogid();
-		model.addAttribute("fogid", fogId);
-		log.info(">>>>>>>>>>>>>> fogId" + fogId);
+		String spaceId = principalDetails.getMember().getSpaceid();
+		model.addAttribute("spaceid", spaceId);
+		log.info(">>>>>>>>>>>>>> spaceId" + spaceId);
 		return "fragments/mypageHeader";
 	}
 }

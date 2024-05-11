@@ -4044,7 +4044,7 @@ cloud:
   search:
     terms:
       - atmosphere
-      - fog
+      - space
       - overcast
       - save
       - upload
@@ -16955,7 +16955,7 @@ smog:
   search:
     terms:
       - dragon
-      - fog
+      - space
       - haze
       - pollution
       - smoke

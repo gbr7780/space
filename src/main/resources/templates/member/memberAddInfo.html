@@ -25,7 +25,7 @@
 			line-height: 1.5;
 		}
 		
-		.btn-fog {
+		.btn-space {
 			background-color: #094B80;
 			color: white;
 			font-weight: bold;
@@ -33,7 +33,7 @@
 			font-size: 1.2rem;
 		}
 		
-		.btn-fog:hover {
+		.btn-space:hover {
 			background-color: #094B80;
 			color: white;
 			font-weight: bold;
@@ -112,8 +112,8 @@
 							
 							
 							<div class="form-group mb-4" >
-								  <label class="label" th:for="fogid" style="font-weight: bold">스페이스 주소</label>
-								  <input type="text" class="form-control" th:field="*{fogid}" placeholder="구분할 수 있는 스페이스 주소를 입력해주세요.">
+								  <label class="label" th:for="spaceid" style="font-weight: bold">스페이스 주소</label>
+								  <input type="text" class="form-control" th:field="*{spaceid}" placeholder="구분할 수 있는 스페이스 주소를 입력해주세요.">
 								  <br>
 								  <label class="label" th:for="area" style="margin-bottom: 6px;font-weight: bold">관심 분야</label>
 								  <br>
@@ -140,7 +140,7 @@
 							
 							<div class="form-group">
 								<!--  <button type="button" onclick="formCheck();" class="btn btn-primary rounded submit p-3">완료</button> -->
-								<button type="button" onclick="formCheck()" class="btn btn-fog rounded submit p-4">완&nbsp&nbsp료</button>
+								<button type="button" onclick="formCheck()" class="btn btn-space rounded submit p-4">완&nbsp&nbsp료</button>
 							</div>
 							
 							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">

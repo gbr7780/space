@@ -81,13 +81,13 @@ public class MypageController {
 	@GetMapping("/main")
 	public String mypageMain(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 		// 방문자 통계
-		String fogId = principalDetails.getMember().getFogid();
+		String spaceId = principalDetails.getMember().getSpaceid();
 		List<HitCount> lists = countService.countList();
 		model.addAttribute("lists", lists);
-		model.addAttribute("fogId", fogId);
+		model.addAttribute("spaceId", spaceId);
 
-		String memFogId = principalDetails.getMember().getFogid();
-		model.addAttribute("memFogId", memFogId);
+		String memSpaceId = principalDetails.getMember().getSpaceid();
+		model.addAttribute("memSpaceId", memSpaceId);
 
 		String name = principalDetails.getMember().getName();
 		model.addAttribute("name", name);
@@ -102,8 +102,8 @@ public class MypageController {
 
 		int counts = 0;
 		for (int i = 0; i < lists.size(); i++) {
-			if (lists.get(i).getFogId().equals(memFogId)) {
-				// 방문자 목록 중 내 포그 아이디 검색
+			if (lists.get(i).getSpaceId().equals(memSpaceId)) {
+				// 방문자 목록 중 내 스페이스 아이디 검색
 				counts += 1;
 			}
 		}
@@ -114,9 +114,9 @@ public class MypageController {
 	// 마이페이지 - 카테고리 관리
 	@GetMapping("/category")
 	public String mypageCategory(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-		// 포그 이름
-		String fogId = principalDetails.getMember().getFogid();
-		model.addAttribute("fogId", fogId);
+		// 스페이스 이름
+		String spaceId = principalDetails.getMember().getSpaceid();
+		model.addAttribute("spaceId", spaceId);
 
 		// 로그인한 사용자 ID
 		Long memId = principalDetails.getMember().getId();
@@ -139,9 +139,9 @@ public class MypageController {
 	// 마이페이지 - 카테고리 수정
 	@GetMapping("/category/update")
 	public String mypageCategoryUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-		// 포그 이름
-		String fogId = principalDetails.getMember().getFogid();
-		model.addAttribute("fogId", fogId);
+		// 스페이스 이름
+		String spaceId = principalDetails.getMember().getSpaceid();
+		model.addAttribute("spaceId", spaceId);
 
 		// 로그인한 사용자 ID
 		Long memId = principalDetails.getMember().getId();
@@ -191,12 +191,12 @@ public class MypageController {
 		return "redirect:/myPage/category";
 	}
 
-	// 마이페이지 - 포그 관리
-	@GetMapping("/fogEdit")
-	public String mypageFogEdit(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+	// 마이페이지 - 스페이스 관리
+	@GetMapping("/spaceEdit")
+	public String mypageSpaceEdit(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
-		String fogId = principalDetails.getMember().getFogid();
-		model.addAttribute("fogId", fogId);
+		String spaceId = principalDetails.getMember().getSpaceid();
+		model.addAttribute("spaceId", spaceId);
 
 		String name = principalDetails.getMember().getName();
 		model.addAttribute("name", name);
@@ -232,15 +232,15 @@ public class MypageController {
 		model.addAttribute("categorysID4", categorysIds.get(3));
 		model.addAttribute("categorysID5", categorysIds.get(4));
 
-		return "myPage/mypagefogEdit";
+		return "myPage/mypagespaceEdit";
 	}
 
-	// 마이페이지 - 포그 삭제
-	@GetMapping(value = "/fogEdit/delete/{id}")
-	public String fogDelete(@PathVariable("id") Long id) {
-		log.info(">>>>>>>>>>  포그 삭제 컨트롤러 접근");
-		categoryContentService.deletefog(id);
-		return "redirect:mypage/fogEdit";
+	// 마이페이지 - 스페이스 삭제
+	@GetMapping(value = "/spaceEdit/delete/{id}")
+	public String spaceDelete(@PathVariable("id") Long id) {
+		log.info(">>>>>>>>>>  스페이스 삭제 컨트롤러 접근");
+		categoryContentService.deletespace(id);
+		return "redirect:mypage/spaceEdit";
 	}
 
 	// 마이페이지 - 설정
@@ -305,8 +305,8 @@ public class MypageController {
 	// 마이페이지 - 작성하기
 	@GetMapping("/write")
 	public String mypageWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-		// String fogId = principalDetails.getMember().getFogid();
-		// model.addAttribute("fogId", fogId);
+		// String spaceId = principalDetails.getMember().getSpaceid();
+		// model.addAttribute("spaceId", spaceId);
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
@@ -341,9 +341,9 @@ public class MypageController {
 		return "myPage/mypageWrite";
 	}
 
-	// 마이페이지 - 포그 수정하기
-	@GetMapping(value = "/fogEdit/update/{id}")
-	public String mypageFogUpdate(@PathVariable("id") Long id, Model model,
+	// 마이페이지 - 스페이스 수정하기
+	@GetMapping(value = "/spaceEdit/update/{id}")
+	public String mypageSpaceUpdate(@PathVariable("id") Long id, Model model,
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		Long memid = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(memid);
@@ -376,11 +376,11 @@ public class MypageController {
 		model.addAttribute("categorysID4", categorysIds.get(3));
 		model.addAttribute("categorysID5", categorysIds.get(4));
 
-		CategoryContent content = categoryContentService.fogDetail(id);
+		CategoryContent content = categoryContentService.spaceDetail(id);
 
 		model.addAttribute("content", content);
 
-		return "myPage/mypagefogUpdate";
+		return "myPage/mypagespaceUpdate";
 	}
 
 	// 마이페이지 - 작성하기
@@ -394,7 +394,7 @@ public class MypageController {
 		CategoryContent content = CategoryContent.createContent(categoryWriteDto);
 		categoryContentService.saveContent(principalDetails, content, category_id);
 
-		return "redirect:/mypage/fogEdit";
+		return "redirect:/mypage/spaceEdit";
 	}
 
 	/**

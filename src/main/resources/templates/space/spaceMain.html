@@ -8,10 +8,10 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>포그 메인 페이지</title>
+<title>스페이스 메인 페이지</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/fog/vendor/bootstrap/css/bootstrap.min.css"
+<link href="/space/vendor/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 
 <!-- Custom fonts for this template -->
@@ -21,12 +21,12 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i"
 	rel="stylesheet">
-<link href="/fog/vendor/devicons/css/devicons.min.css" rel="stylesheet">
-	<link href="/fog/vendor/simple-line-icons/css/simple-line-icons.css"
+<link href="/space/vendor/devicons/css/devicons.min.css" rel="stylesheet">
+	<link href="/space/vendor/simple-line-icons/css/simple-line-icons.css"
 	rel="stylesheet">
 	<!-- 글자 변경 추가 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link href="/fog/vendor/font-awesome/css/font-awesome.min.css"
+	<link href="/space/vendor/font-awesome/css/font-awesome.min.css"
 		  rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,14 +43,14 @@
 
 
 <!-- Custom styles for this template -->
-<link href="/fog/css/resume.min.css" rel="stylesheet">
+<link href="/space/css/resume.min.css" rel="stylesheet">
 
 <style>
 body {
 	font-family: 'Gothic A1', sans-serif;
 }
 
-.fog-title {
+.space-title {
 	font-weight: bold;
 	font-family: 'Nanum Gothic', sans-serif;
 }
@@ -105,7 +105,7 @@ body::-webkit-scrollbar {
 			<span class="d-block d-lg-none">Start Bootstrap</span> <span class="d-none d-lg-block">
 			<img
 				class="img-fluid img-profile rounded-circle mx-auto mb-2"
-				th:src="${member.image} != null ? ${member.image} : @{/img/포그.png}"
+				th:src="${member.image} != null ? ${member.image} : @{/img/스페이스.png}"
 				alt="" style="width: 300px; height: 300px;">
 		</span>
 		</a>
@@ -148,10 +148,10 @@ body::-webkit-scrollbar {
 	<div class="container-fluid p-0"
 		style="margin-left: 100px; width: 1500px;">
 		
-		<div th:if="${#strings.equals(fogid, memMember.fogid)} or ${#strings.equals(member.AllPublicYn, 'Y')}">
-			<!-- 내용을 확인하려면 계정의 ID와 로그인한 ID가 동일하거나 포그 전체 공개 -->
+		<div th:if="${#strings.equals(spaceid, memMember.spaceid)} or ${#strings.equals(member.AllPublicYn, 'Y')}">
+			<!-- 내용을 확인하려면 계정의 ID와 로그인한 ID가 동일하거나 스페이스 전체 공개 -->
 			<!-- 상단 사이드바 -->
-			<div class="floBanPc1 hidden-md hidden-sm hidden-xs" th:if="${#strings.equals(fogid, memMember.fogid)}">
+			<div class="floBanPc1 hidden-md hidden-sm hidden-xs" th:if="${#strings.equals(spaceid, memMember.spaceid)}">
 				<button type="button" class="btn btn-secondary dropdown-toggle"
 					data-bs-toggle="dropdown" aria-expanded="false"
 					style="padding: 0px; background-color: transparent; border: none;">
@@ -165,7 +165,7 @@ body::-webkit-scrollbar {
 			</div>
 
 			<!-- 하단 사이드바 -->
-			<div class="floBanPc2 hidden-md hidden-sm hidden-xs" th:if="${#strings.equals(fogid, memMember.fogid)}">
+			<div class="floBanPc2 hidden-md hidden-sm hidden-xs" th:if="${#strings.equals(spaceid, memMember.spaceid)}">
 				<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0px; background-color: transparent; border: none;">
 					<img src="/img/rightBottomLogo.png" style="width: 90px; height: 80px">
 				</button>
@@ -178,7 +178,7 @@ body::-webkit-scrollbar {
 
 			<section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
 				<div class="my-auto" >
-					<h2 class="mb-5 fog-title" th:text="${categorys1}">보유기술</h2>
+					<h2 class="mb-5 space-title" th:text="${categorys1}">보유기술</h2>
 					
 					<div th:each="vo : ${conList1}">
 					<p th:text="${vo}" style="font-size:30px; color:black;">-</p>
@@ -191,7 +191,7 @@ body::-webkit-scrollbar {
 			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
 				id="experience">
 				<div class="my-auto">
-					<h2 class="mb-5 fog-title" th:text="${categorys2}">프로젝트</h2>
+					<h2 class="mb-5 space-title" th:text="${categorys2}">프로젝트</h2>
 					
 					<div th:each="vo1 : ${conList2}">
 					<p th:text="${vo1}" style="font-size:30px; color:black;">-</p>
@@ -206,7 +206,7 @@ body::-webkit-scrollbar {
 			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
 				id="education">
 				<div class="my-auto">
-					<h2 class="mb-5 fog-title" th:text="${categorys3}">대외활동</h2>
+					<h2 class="mb-5 space-title" th:text="${categorys3}">대외활동</h2>
 
 					<div th:each="vo3 : ${conList3}">
 					<p th:text="${vo3}" style="font-size:30px; color:black;">-</p>
@@ -220,7 +220,7 @@ body::-webkit-scrollbar {
 			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
 				id="skills">
 				<div class="my-auto">
-					<h2 class="mb-5 fog-title" th:text="${categorys4}">수상자격 / 자격증</h2>
+					<h2 class="mb-5 space-title" th:text="${categorys4}">수상자격 / 자격증</h2>
 
 					<div th:each="vo4 : ${conList4}">
 					<p th:text="${vo4}" style="font-size:30px; color:black;">-</p>
@@ -233,7 +233,7 @@ body::-webkit-scrollbar {
 			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
 				id="interests">
 				<div class="my-auto">
-					<h2 class="mb-5 fog-title" th:text="${categorys5}">보유기술</h2>
+					<h2 class="mb-5 space-title" th:text="${categorys5}">보유기술</h2>
 					<div th:each="vo5 : ${conList5}">
 					<p th:text="${vo5}" style="font-size:30px; color:black;">-</p>
 					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
@@ -243,11 +243,11 @@ body::-webkit-scrollbar {
 			</section>
 		</div>
 		<div
-			th:if="!(${#strings.equals(fogid, memMember.fogid)}) and ${#strings.equals(member.AllPublicYn, 'N')}">
-			<!-- th:uless="${#strings.equals(fogid, memMember.fogid)} or ${#strings.equals(member.AllPublicYn, 'Y')}">-->
+			th:if="!(${#strings.equals(spaceid, memMember.spaceid)}) and ${#strings.equals(member.AllPublicYn, 'N')}">
+			<!-- th:uless="${#strings.equals(spaceid, memMember.spaceid)} or ${#strings.equals(member.AllPublicYn, 'Y')}">-->
 			<p
 				style="margin-top: 400px; margin-left: 350px; margin-bottom: 35px; font-weight: bold; font-size: 52px;">
-				공개되지 않은 포그입니다.</p>
+				공개되지 않은 스페이스입니다.</p>
 		</div>
 	</div>
 
@@ -260,7 +260,7 @@ body::-webkit-scrollbar {
 					style="height: 60px; width: 500px; text-align: center; color: black; margin-top: 20px;">
 					<div style="font-weight: bold; font-size: 16px;">공유 URL을
 						복사하세요!</div>
-					<input id="myFog" th:value="'http://localhost/fog/' + ${fogid}"
+					<input id="mySpace" th:value="'http://localhost/space/' + ${spaceid}"
 						readonly
 						style="width: 100%; border: none; outline: none; padding: 0px; text-align: center; margin-top: 10px;">
 				</div>
@@ -277,7 +277,7 @@ body::-webkit-scrollbar {
 	<script type="text/javascript">
 		function copy_to_clipboard() {
 			console.log("Dd")
-			var copyText = document.getElementById('myFog');
+			var copyText = document.getElementById('mySpace');
 			copyText.select();
 			copyText.setSelectionRange(0, 99999);
 			document.execCommand("Copy");
@@ -287,14 +287,14 @@ body::-webkit-scrollbar {
 	</script>
 
 	<!-- Bootstrap core JavaScript -->
-	<script src="/fog/vendor/jquery/jquery.min.js"></script>
-	<script src="/fog/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/space/vendor/jquery/jquery.min.js"></script>
+	<script src="/space/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Plugin JavaScript -->
-	<script src="/fog/vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="/space/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for this template -->
-	<script src="/fog/js/resume.min.js"></script>
+	<script src="/space/js/resume.min.js"></script>
 
 </body>
 </html>

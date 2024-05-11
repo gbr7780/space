@@ -29,10 +29,10 @@ public class HitCount {
 	private String date; // 조회한 날짜
 
 	@Column(length = 500)
-	private String fogId; // 조회된 사용자 ID
+	private String spaceId; // 조회된 사용자 ID
 
-	public void save(String fogId, String formatedNow) {
-		this.fogId = fogId;
+	public void save(String spaceId, String formatedNow) {
+		this.spaceId = spaceId;
 		this.date = formatedNow;
 	}
 }

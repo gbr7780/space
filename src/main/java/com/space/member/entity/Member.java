@@ -51,9 +51,9 @@ public class Member extends BaseEntity {
     @Column(name="member_area")
     private Area area;
     
-    // 포그 주소
-    @Column(unique = true, name="member_fogid")
-    private String fogid;
+    // 스페이스 주소
+    @Column(unique = true, name="member_spaceid")
+    private String spaceid;
 
     // enum 타입은 기본적으로 순서가 저장되는데 순서가 바뀌면 문제가 생기므로 STRING 옵션 설정한다.
     @Enumerated(EnumType.STRING)
@@ -90,7 +90,7 @@ public class Member extends BaseEntity {
     
     public void addInfoOAuth2(OauthAddInfoDto addInfoDto) {
     	this.area = addInfoDto.getArea();
-    	this.fogid = addInfoDto.getFogid();
+    	this.spaceid = addInfoDto.getSpaceid();
     }
      
     @Builder
