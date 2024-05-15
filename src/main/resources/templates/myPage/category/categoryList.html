@@ -48,13 +48,14 @@
 					return response.json();
 				}
 			}).then(json => {
+
 				let html = '';
 
 				json.forEach((obj, idx) => {
 					html += `
 						<div style="float: left; width: 70%; margin-top: 30px;">
-							<input type="hidden" id="category_id" name="category_id" value="${obj.categoryId}">
-							<input type="text" class="categoryTitle" name="${obj.categoryId}"
+							<input type="hidden" name="categoryId" value="${obj.categoryId}">
+							<input type="text" name="categoryType"
 								style="padding-left: 10px;width: 700px; height : 45px; font-size: 22px; letter-spacing: 4px; text-align: left; margin-left: 50px; float: left;  background-color: transparent; color: black;"
 								value="${obj.categoryType}">
 						</div>
@@ -68,8 +69,44 @@
 			})
 		}
 
+		// 카테고리 수정
 		function update(){
-			alert("수정되었습니다.");
+
+			const params = [
+			]
+
+			var categoryId = $('[name="categoryId"]');
+			var categoryType = $('[name="categoryType"]');
+
+			for ( var i = 0 ; i < categoryId.length ; i++ ) {
+				var obj = {};
+				obj.categoryId = categoryId[i].value;
+				obj.categoryType = categoryType[i].value;
+				obj.memberId = /*[[ ${memId} ]]*/;
+				params.push(obj);
+			}
+
+			fetch('/mypage/category/api/update', {
+				method : 'PATCH',
+				headers: {
+					'header': document.getElementById('_csrf_header').content,
+					'X-Requested-With': 'XMLHttpRequest',
+					"Content-Type": "application/json",
+					'X-CSRF-Token': document.getElementById('_csrf').content
+				},
+				body: JSON.stringify(params)
+			}).then(response => {
+				if (!response.ok) {
+					throw new Error('Request failed...');
+				} else {
+					return response.json();
+				}
+			}).then(json => {
+				alert("수정되었습니다.");
+
+			}).catch(error => {
+				alert('오류가 발생하였습니다.');
+			})
 		}
 	</script>
 </th:block>

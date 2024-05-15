@@ -5,8 +5,6 @@ import com.space.mypage.category.dto.CategoryDto;
 import com.space.mypage.category.repository.CategoryRepository;
 import com.space.mypage.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,15 +40,11 @@ public class CategoryApiController {
         return categoryList;
     }
 
-    /**
-     * 카테고리 수정
-     * @param member_id
-     * @param params
-     * @return member_id
-     */
-    @PatchMapping("/{member_id}")
-    public Long save(@PathVariable final Long member_id, @RequestBody final List<CategoryDto> params) {
+    // 카테고리 수정
+    @PatchMapping("/update")
+    public List<CategoryDto> categoryUpdate(@RequestBody final List<CategoryDto> dtoList) {
+        categoryService.update(dtoList);
 //        return categoryService.update(id, params);
-        return member_id;
+        return dtoList;
     }
 }

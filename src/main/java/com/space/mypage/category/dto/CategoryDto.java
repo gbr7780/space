@@ -32,5 +32,6 @@ public class CategoryDto {
 	public CategoryDto(Category category) {
 		this.categoryId = category.getId();
 		this.categoryType = category.getType();
+		this.memberId = category.getMember().getId();
 	}
 }
