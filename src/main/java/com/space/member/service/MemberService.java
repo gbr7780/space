@@ -1,5 +1,8 @@
 package com.space.member.service;
 
+import com.space.sgg.dto.SggResponseDto;
+import com.space.sgg.entity.Sgg;
+import com.space.sgg.repository.SggRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
 import com.space.mypage.dto.MemberUpdateDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 //로직을 처리하다가 에러가 발생하면 변경된 데이터를 조직 이전으로 콜백 시켜주기 위해
 @Transactional
@@ -27,6 +33,8 @@ public class MemberService implements UserDetailsService {
 	// 빈에 생성자가 1개이고 생성자의 파라미터 타입이 빈으로 등록이 가능하면 @Autowired 없이 의존성 주입 가능
 	@Autowired
 	private MemberRepository memberRepository;
+
+	private final SggRepository sggRepository;
 
 	public Member saveMember(Member member) {
 		validateDuplicateMember(member);
@@ -116,9 +124,30 @@ public class MemberService implements UserDetailsService {
 		}
 	}
 
-
+	/**
+	 * 회원가입 추가정보 페이지에서 스페이스아이디 중복체크
+	 * @param spaceId
+	 * @return 카운트
+	 */
 	public Long spaceIdCheck(String spaceId) {
 		return memberRepository.countBySpaceId(spaceId);
 	}
 
+	/**
+	 * sido 구하는 메소드
+	 * @return
+	 */
+	public List<SggResponseDto> getSidoList() {
+		List<Sgg> lists = sggRepository.getSidoList();
+		return lists.stream().map(SggResponseDto::new).collect(Collectors.toList());
+	}
+
+	/**
+	 * sido 구하는 메소드
+	 * @return
+	 */
+	public List<SggResponseDto> getSgg(String sido) {
+		List<Sgg> lists = sggRepository.getSggList(sido);
+		return lists.stream().map(SggResponseDto::new).collect(Collectors.toList());
+	}
 }

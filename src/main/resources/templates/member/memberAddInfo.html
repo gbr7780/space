@@ -125,9 +125,12 @@
 								<br>
 								<label class="label" th:for="area" style="margin-bottom: 6px;font-weight: bold">취업 희망 지역</label>
 								<br>
-								<select class="form-select " th:field="*{area}" aria-label="Default select example" style="padding-top:5px;width: 400px;height: 35px">
-									<option value="">지역</option>
-									<option th:each="sgg : ${sgg}" th:value="${sgg}" th:text="${sgg}"></option>
+								<select class="form-select " id="sido" aria-label="Default select example" style="padding-top:5px;width: 195px;height: 35px">
+									<option value="">특별시∙도</option>
+								</select>
+
+								<select class="form-select " id="sgg" aria-label="Default select example" style="padding-top:5px;width: 190px;height: 35px">
+									<option value="">시∙군∙구</option>
 								</select>
 							</div>
 							
@@ -143,7 +146,7 @@
 								<button type="button" onclick="formCheck()" class="btn btn-space rounded submit p-4">완&nbsp&nbsp료</button>
 							</div>
 							
-							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+							<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 						</form>
 					</div>
 				</div>
@@ -158,33 +161,154 @@
 
 </body>
  <script th:inline="javascript">
-         $(document).ready(function (){
-            var errorMessage = [[${errorMessage}]];
-            		
-            console.log(errorMessage);
-            if(errorMessage != null){
-                alert(errorMessage);
-            } 
-            
-            
-        }); 
+
+	 $(document).ready(function (){
+		debugger;
+
+		var errorMessage = [[${errorMessage}]];
+
+		console.log(errorMessage);
+		if(errorMessage != null){
+			alert(errorMessage);
+		}
+
+		 getSido();
+
+		 $("#sido").on("change", function() {
+
+			 const sido = $("#sido").val();
+
+			 if (sido !== "") {
+				 fetch(`/members/api/getSgg?sido=${sido}`).then(response => {
+					 if(response.ok) {
+						 debugger;
+						 return response.json();
+					 }
+				 }).then(json => {
+					 let html = '';
+					 if(!json.length) {
+
+					 } else {
+						 $('#sgg').empty();
+						 json.forEach((obj, idx) => {
+							 html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+							 `;
+						 })
+						 $('#sgg').append(html);
+					 }
+				 });
+
+			 }
+
+			 console.log($('#sido').val());
+		 });
+
+
+
+
+
+	 });
+
+	 /**
+	  * 특별시도 리스트
+	  */
+	 function getSido() {
+
+		 fetch('/members/api/getSido').then(response => {
+	 		if(response.ok) {
+				 return response.json();
+			}
+		 }).then(json => {
+			 let html = '';
+
+			 if(!json.length){
+
+			 } else {
+				 json.forEach((obj, idx) => {
+					 html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+					 `;
+				 });
+			 }
+
+		 $('#sido').append(html);
+		 });
+	 }
+
+
+
+
          
          
-          function formCheck(){
-         	var agree = document.getElementById('agree');
-         	
-         	if(!agree.checked){
-         		alert("약관 동의를 체크하세요.");
-         		agree.focus();
-         		return false;
-         	}
-         	document.join_form.submit();
-         	var Message = [[${Message}]];
-         	if(Message != null){
-         		alert(Message);
-         	}
-         	
-         } 
+	function formCheck(){
+		 /*
+		const header = document.querySelector('meta[name="_csrf_header"]').content;
+		const token = document.querySelector('meta[name="_csrf"]').content;
+
+		const params = {
+			id : 1,
+			name : "꿀"
+		};
+
+		fetch('/members/api/spaceIdCheck',{
+			method : 'POST',
+			headers : {
+				'header': header,
+				'X-Requested-With': 'XMLHttpRequest',
+				'Content-Type' : 'application/json',
+				'X-CSRF-Token': token
+			},
+			body : JSON.stringify(params)
+
+		}).then(response => {
+			if(response.ok) {
+				return response.json();
+			}
+		})
+		*/
+
+
+		let spaceId = $('#spaceId').val();
+		let area = $('#area').val();
+		let sido = $('#sido').val();
+		let sgg = $('#sgg').val();
+
+
+
+		if(spaceId.length < 1) {
+			alert('스페이스 주소를 입력해 주세요.');
+			return false;
+		}
+		if(area === '') {
+		  alert('분야를 선택해 주세요.');
+		  return false;
+		}
+
+
+
+
+
+
+
+		/*
+		var agree = document.getElementById('agree');
+
+		if(!agree.checked){
+			alert("약관 동의를 체크하세요.");
+			agree.focus();
+			return false;
+		}
+		*/
+
+		/*
+		document.join_form.submit();
+		var Message = [[${Message}]];
+		if(Message != null){
+			alert(Message);
+		}
+		*/
+ 	}
         </script>
 
 </html>
