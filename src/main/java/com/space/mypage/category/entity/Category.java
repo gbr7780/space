@@ -1,4 +1,4 @@
-package com.space.mypage.entity;
+package com.space.mypage.category.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +62,6 @@ public class Category {
             Category category = new Category(type);
             categorys.add(category);
         }
-
-    	
     	return categorys;
     }
-    
-
 }

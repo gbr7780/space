@@ -30,5 +30,8 @@
 
 	<!-- 공통 스크립트-->
 	<th:block th:replace="fragments/mypage/script :: scriptFragment"></th:block>
+
+	<!-- 각 페이지의 JS 코드 렌더링 -->
+	<th:block layout:fragment="script"></th:block>
 </body>
 </html>

@@ -3,6 +3,8 @@ package com.space.space.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.space.space.entity.Space;
+import com.space.space.repository.SpaceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,24 +19,22 @@ import com.space.hitCount.service.HitCountService;
 import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
 import com.space.member.service.MemberService;
-import com.space.mypage.entity.Category;
-import com.space.mypage.entity.CategoryContent;
-import com.space.mypage.repository.CategoryContentRepository;
-import com.space.mypage.repository.CategoryRepository;
-import com.space.mypage.service.CategoryContentService;
+import com.space.mypage.category.entity.Category;
+import com.space.mypage.category.repository.CategoryRepository;
+import com.space.mypage.service.SpaceService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class CategoryController {
+public class SpaceController {
 
 	@Autowired
 	private MemberService memberService;
 
 	@Autowired
-	private CategoryContentService categoryContentService;
+	private SpaceService spaceService;
 
 	@Autowired
 	private MemberRepository memberRepository;
@@ -43,7 +43,7 @@ public class CategoryController {
 	private CategoryRepository categoryRepository;
 	
 	@Autowired
-	private CategoryContentRepository categoryContentRepository;
+	private SpaceRepository spaceRepository;
 
 	private final HitCountService countService;
 
@@ -106,7 +106,7 @@ public class CategoryController {
 		Long categorysIds5 = categorysIds.get(4);
 
 		// 내용 출력
-		List<CategoryContent> listscon = categoryContentRepository.findAll();
+		List<Space> listscon = spaceRepository.findAll();
 		List<String> titleList = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
 		
 		List<String> conList1 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언

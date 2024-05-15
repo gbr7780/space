@@ -1,11 +1,11 @@
-package com.space.mypage.dto;
+package com.space.space.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryWriteDto {
+public class SpaceWriteDto {
 	private String category;
 	
 	private String title;

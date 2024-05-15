@@ -6,6 +6,11 @@
 
         <head>
             <meta charset="utf-8">
+
+            <!-- 로그인하지 않았을때 csrf가 null이므로 에러가 나타남 아래 코드 2줄로 null이 아닐경우에만 csrf 참조 하도록 수정  -->
+            <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}">
+            <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}">
+
             <title>space</title>
             <!-- 사용자 CSS 추가-->
             <link rel="stylesheet"

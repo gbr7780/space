@@ -1,31 +1,24 @@
-package com.space.mypage.entity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+package com.space.space.entity;
 
 import com.space.member.entity.Member;
-import com.space.mypage.dto.CategoryWriteDto;
-
+import com.space.mypage.category.entity.Category;
+import com.space.space.dto.SpaceWriteDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name = "Category_Content")
+@Table(name = "space")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class CategoryContent {
+public class Space {
 	@Id
-	@Column(name = "cc_id")
+	@Column(name = "space_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
@@ -52,11 +45,11 @@ public class CategoryContent {
 	private Member member;
 	
 	// 객체 생성
-	public static CategoryContent createContent(CategoryWriteDto categoryWriteDto) {
-		CategoryContent content = new CategoryContent();
-		content.setContent(categoryWriteDto.getContent());
-		content.setCategoryYn(categoryWriteDto.getCategoryYn());
-		content.setTitle(categoryWriteDto.getTitle());
+	public static Space createContent(SpaceWriteDto spaceWriteDto) {
+		Space content = new Space();
+		content.setContent(spaceWriteDto.getContent());
+		content.setCategoryYn(spaceWriteDto.getCategoryYn());
+		content.setTitle(spaceWriteDto.getTitle());
 		return content;
 	}
 }

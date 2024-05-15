@@ -1,5 +1,6 @@
 package com.space.member.service;
 
+import com.space.member.dto.MemberUpdateDto;
 import com.space.sgg.dto.SggResponseDto;
 import com.space.sgg.entity.Sgg;
 import com.space.sgg.repository.SggRepository;
@@ -17,7 +18,6 @@ import com.space.config.auth.PrincipalDetails;
 import com.space.member.dto.OauthAddInfoDto;
 import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
-import com.space.mypage.dto.MemberUpdateDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

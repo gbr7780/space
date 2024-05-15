@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.space.space.entity.Space;
+import com.space.space.repository.SpaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -13,17 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.space.config.auth.PrincipalDetails;
 import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
-import com.space.mypage.entity.Category;
-import com.space.mypage.entity.CategoryContent;
-import com.space.mypage.repository.CategoryContentRepository;
-import com.space.mypage.repository.CategoryRepository;
+import com.space.mypage.category.entity.Category;
+import com.space.mypage.category.repository.CategoryRepository;
 
 @Service
 @Transactional
-public class CategoryContentService {
+public class SpaceService {
 	
 	@Autowired
-	private CategoryContentRepository categoryContentRepository;
+	private SpaceRepository spaceRepository;
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -32,16 +32,16 @@ public class CategoryContentService {
 	private MemberRepository memberRepository;
 	
 	// 마이페이지 작성하기 
-	public CategoryContent saveContent(@AuthenticationPrincipal PrincipalDetails principalDetails,CategoryContent categoryContent,String Category_id) {
+	public Space saveSpace(@AuthenticationPrincipal PrincipalDetails principalDetails, Space space, String Category_id) {
 		Long member_id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(member_id);
 		
 		Category category = categoryRepository.findCategoryById(Long.parseLong(Category_id));
 		
-		categoryContent.setMember(member);
-		categoryContent.setCategory(category);
+		space.setMember(member);
+		space.setCategory(category);
 		
-		return categoryContentRepository.save(categoryContent);
+		return spaceRepository.save(space);
 	}
 	 
 	public void allCatgory() {
@@ -77,14 +77,14 @@ public class CategoryContentService {
 
 	// 스페이스 삭제
 	public void deletespace(Long id) {
-		categoryContentRepository.deleteById(id);
+		spaceRepository.deleteById(id);
 	}
 
 	// 스페이스 수정
-	public CategoryContent spaceDetail(Long id) {
-		Optional<CategoryContent> optional = categoryContentRepository.findById(id);
+	public Space spaceDetail(Long id) {
+		Optional<Space> optional = spaceRepository.findById(id);
 		if (optional.isPresent()) {
-			CategoryContent content = optional.get();
+			Space content = optional.get();
 			return content;
 		} else {
 			throw new NullPointerException();

@@ -20,8 +20,8 @@ import com.space.config.oauth.provider.OAuth2UserInfo;
 import com.space.member.constant.Role;
 import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
-import com.space.mypage.entity.Category;
-import com.space.mypage.service.CategoryContentService;
+import com.space.mypage.category.entity.Category;
+import com.space.mypage.service.SpaceService;
 
 @Service
 @Slf4j
@@ -34,7 +34,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	private MemberRepository memberRepository;
 	
 	@Autowired
-	private CategoryContentService categoryContentService;
+	private SpaceService spaceService;
 
 	// 구글로부터 받은 userRequest 데이터에 대한 후처리되는 함수
 	// 메서드 종료시 @AuthenticationPrincipal 어노테이션이 만들어진다.
@@ -93,7 +93,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 					.allPublicYn("Y")
 					.build();
 			memberRepository.save(memberEntity);	
-			categoryContentService.createCategory(Category.createCategory(), memberEntity);		// 회원가입시 카테고리 생성
+			spaceService.createCategory(Category.createCategory(), memberEntity);		// 회원가입시 카테고리 생성
 		} else {
 			log.info("OAuth2 로그인한 적이 있습니다. 자동회원가입이 되어있습니다.");
 		}
