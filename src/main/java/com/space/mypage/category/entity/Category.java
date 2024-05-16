@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.space.member.entity.Member;
 
+import com.space.mypage.category.dto.CategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,5 +64,11 @@ public class Category {
             categorys.add(category);
         }
     	return categorys;
+    }
+
+    // dto to entity
+    public Category(CategoryDto dto) {
+        this.id = dto.getCategoryId();
+        this.type = dto.getCategoryType();
     }
 }
