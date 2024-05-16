@@ -72,6 +72,10 @@ public class Member extends BaseEntity {
     // 공개 여부
     @Column(name="member_allPublicYn")
     private String allPublicYn;
+
+    // 시군구 코드
+    @Column(name="member_sggCd")
+    private String sggCd;
     
 //    @OneToMany(mappedBy = "member")
 //    private List<Cash> cashs = new ArrayList<>();
@@ -91,6 +95,7 @@ public class Member extends BaseEntity {
     public void addInfoOAuth2(OauthAddInfoDto addInfoDto) {
     	this.area = addInfoDto.getArea();
     	this.spaceId = addInfoDto.getSpaceId();
+        this.sggCd = addInfoDto.getSggCd();
     }
      
     @Builder

@@ -161,27 +161,52 @@
 
 </body>
  <script th:inline="javascript">
+	 const header = document.querySelector('meta[name="_csrf_header"]').content;
+	 const token = document.querySelector('meta[name="_csrf"]').content;
+
 
 	 $(document).ready(function (){
-		debugger;
-
-		var errorMessage = [[${errorMessage}]];
-
-		console.log(errorMessage);
-		if(errorMessage != null){
-			alert(errorMessage);
-		}
-
 		 getSido();
+		 getSgg();
+	 });
 
+	 /**
+	  * 특별시도 리스트
+	  */
+	 function getSido() {
+		 fetch('/members/api/getSido').then(response => {
+	 		if(response.ok) {
+				 return response.json();
+			} else {
+				alert('문제가 발생하였습니다.');
+			}
+		 }).then(json => {
+			 let html = '';
+
+			 if(!json.length){
+				alert('해당하는 정보가 존재하지 않습니다.');
+			 } else {
+				 json.forEach((obj, idx) => {
+					 html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+					 `;
+				 });
+			 }
+
+			 $('#sido').append(html);
+		 });
+	 }
+
+	 /**
+	  * 특별시도 선택시 하위 시군구 출력
+	  */
+	 function getSgg(){
 		 $("#sido").on("change", function() {
-
 			 const sido = $("#sido").val();
-
 			 if (sido !== "") {
 				 fetch(`/members/api/getSgg?sido=${sido}`).then(response => {
 					 if(response.ok) {
-						 debugger;
+
 						 return response.json();
 					 }
 				 }).then(json => {
@@ -198,60 +223,74 @@
 						 $('#sgg').append(html);
 					 }
 				 });
-
 			 }
-
-			 console.log($('#sido').val());
-		 });
-
-
-
-
-
-	 });
-
-	 /**
-	  * 특별시도 리스트
-	  */
-	 function getSido() {
-
-		 fetch('/members/api/getSido').then(response => {
-	 		if(response.ok) {
-				 return response.json();
-			}
-		 }).then(json => {
-			 let html = '';
-
-			 if(!json.length){
-
-			 } else {
-				 json.forEach((obj, idx) => {
-					 html += `
-					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
-					 `;
-				 });
-			 }
-
-		 $('#sido').append(html);
 		 });
 	 }
 
+	 /**
+	  * 추가 정보 등록 체크
+	  */
+	 async function formCheck(){
+		 let spaceId = $('#spaceId').val();
+		 let area = $('#area').val();
+		 let sido = $('#sido').val();
+		 let agree = $('#agree').is(':checked');
+
+		if(spaceId.length < 1) {
+			alert('스페이스 주소를 입력해 주세요.');
+			return false;
+		}
+		if(area === '') {
+			alert('분야를 선택해 주세요.');
+			return false;
+		}
+		if(sido === '') {
+			alert('지역을 선택해주세요.');
+			return false;
+		}
+		if(!agree){
+			alert('약관 동의를 체크하세요.');
+			return false;
+		}
+		await loginAddInfo();
+ 	}
+
+	 /**
+	  * 스페이스 중복 체크 및 LoginAddInfo
+	  */
+	 async function loginAddInfo(){
+		 let spaceId = $('#spaceId').val();
+		 let area = $('#area').val();
+		 let sgg = $('#sgg').val();
 
 
+		const response = await fetch('/members/api/spaceIdCheck',{
+			method : 'POST',
+			headers : {
+				'header': header,
+				'X-Requested-With': 'XMLHttpRequest',
+				'Content-Type' : 'application/json',
+				'X-CSRF-Token': token
+			},
+			body : spaceId
+		});
 
-         
-         
-	function formCheck(){
-		 /*
-		const header = document.querySelector('meta[name="_csrf_header"]').content;
-		const token = document.querySelector('meta[name="_csrf"]').content;
+		const data = await response.json();
 
-		const params = {
-			id : 1,
-			name : "꿀"
-		};
+		if(data) {
+			alert('스페이스 아이디가 이미 존재합니다. 다른 아이디를 입력해주세요.');
+			$('#spaceId').val('');
+			return false;
+		} else {
 
-		fetch('/members/api/spaceIdCheck',{
+			const params = {
+				spaceId : spaceId,
+				area : area,
+				sggCd : sgg
+			};
+
+
+		fetch('/members/api/addLoginInfo',{
 			method : 'POST',
 			headers : {
 				'header': header,
@@ -262,48 +301,17 @@
 			body : JSON.stringify(params)
 
 		}).then(response => {
-			if(response.ok) {
-				return response.json();
+			if(response.ok){
+				location.replace('/space/'+spaceId);
+			}
+			else {
+				alert('등록에 실패하였습니다.')
+				return false;
 			}
 		})
-		*/
-
-
-		let spaceId = $('#spaceId').val();
-		let area = $('#area').val();
-		let sido = $('#sido').val();
-		let sgg = $('#sgg').val();
-
-
-
-		if(spaceId.length < 1) {
-			alert('스페이스 주소를 입력해 주세요.');
-			return false;
 		}
-		if(area === '') {
-		  alert('분야를 선택해 주세요.');
-		  return false;
-		}
+	 }
 
-
-
-
-
-
-
-		var agree = document.getElementById('agree');
-
-		if(!agree.checked){
-			alert("약관 동의를 체크하세요.");
-			agree.focus();
-			return false;
-		}
-		document.join_form.submit();
-		var Message = [[${Message}]];
-		if(Message != null){
-			alert(Message);
-		}
- 	}
         </script>
 
 </html>
