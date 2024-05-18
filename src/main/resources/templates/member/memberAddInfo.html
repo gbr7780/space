@@ -108,9 +108,7 @@
 						
 						<!-- <a href="#" class="img d-flex align-items-center justify-content-center"><span class="fa fa-user-o"></span></a> -->
 						<form class="signup-form" th:object="${oauthAddInfoDto}" action="/members/login/addInfo" role="form" method="post" name="join_form">
-							
-							
-							
+
 							<div class="form-group mb-4" >
 								  <label class="label" th:for="spaceId" style="font-weight: bold">스페이스 주소</label>
 								  <input type="text" class="form-control" th:field="*{spaceId}" placeholder="구분할 수 있는 스페이스 주소를 입력해주세요.">

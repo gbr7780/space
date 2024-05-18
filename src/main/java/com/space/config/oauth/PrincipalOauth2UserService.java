@@ -91,6 +91,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 					.name(name)
 					.image(image)
 					.allPublicYn("Y")
+					.spaceName(name)
 					.build();
 			memberRepository.save(memberEntity);	
 			spaceService.createCategory(Category.createCategory(), memberEntity);		// 회원가입시 카테고리 생성

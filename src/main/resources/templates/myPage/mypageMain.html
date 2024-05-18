@@ -79,28 +79,32 @@
 		<!-- 스페이스 이름 -->
 		<div style="text-align: left; margin-left: 45px; margin-top: 23px;margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >스페이스 이름</div>
 
-		<input class="spaceText" type="text" name="name" style="width: 810px; font-size: 20px;
-		letter-spacing: 4px; text-align: left; margin-left: 45px; float: left; padding: 5px;" placeholder="스페이스 이름을 입력해주세요.">
+		<input class="spaceText" type="text" name="name" id="name" style="width: 810px; font-size: 20px;
+		letter-spacing: 4px; text-align: left; margin-left: 45px; float: left; padding: 5px;" placeholder="스페이스 이름을 입력해주세요." th:value="${member.spaceName}">
 		<br>
 		<!-- 관심 분야 -->
 		<div style="float : left; width: 35%; text-align: left; margin-left: 45px; margin-top: 43px; margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >관심 분야</div>
 		<!-- 취업 희망 지역 -->
 		<div style="float : right; width: 44%; text-align: left;  margin-top: 43px; margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >취업 희망 지역</div>
-		<select class="form-select "  aria-label="Default select example" style="float: left;margin-left: 45px;padding-top:5px;width: 350px;height: 35px">
+		<select class="form-select " id="area"  aria-label="Default select example" style="float: left;margin-left: 45px;padding-top:5px;width: 250px;height: 35px">
 			<option value="">분야</option>
-			<option th:each="area : ${local}" th:value="${area}" th:text="${area}"></option>
+			<option th:each="area : ${local}" th:value="${area}" th:text="${area}" th:selected="${area} == ${member.area}"></option>
 		</select>
 
-		<select class="form-select "  aria-label="Default select example" style="float: right;margin-right: 45px;padding-top:5px;width: 350px;height: 35px">
+		<select class="form-select " id="sgg" aria-label="Default select example" style="float: right;margin-right: 45px;padding-top:5px;width: 200px;height: 35px" >
 			<option value="">지역</option>
-			<option th:each="sgg : ${sgg}" th:value="${sgg}" th:text="${sgg}"></option>
+
 		</select>
+		<select class="form-select " id="sido" aria-label="Default select example" style="float: right;margin-right: 10px;padding-top:5px;width: 200px;height: 35px">
+			<option value="">지역</option>
+		</select>
+
 
 		<!-- 스페이스 전체 공개 여부 -->
 		<div style="float:left;width: 70%;text-align: left; margin-left: 45px; margin-top: 43px;margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >스페이스 전체 공개 여부</div>
 		<button type="button" class="btn btn-space"
 				style="width: 120px; float: right; margin-right: 45px;margin-top: 65px"
-				onclick="formSubmit()">저장
+				id="submit">저장
 		</button>
 		<div style="float: left; width: 35%; margin-top: 0px; text-align: left;margin-left:8px">
 			<input class="form-check-input" type="radio" name="radio" id="flexRadioDefault1" value="Y" th:checked="${member.allPublicYn eq 'Y'}" style="margin-left: 40px;" checked>
@@ -334,6 +338,132 @@
 		    }
 		  }
 		});
+
+
+		$(document).ready(function (){
+			var memberSggcd = /*[[ ${member.sggCd} ]]*/;
+			debugger;
+			getSido();
+			getSgg();
+			setMemberSgg(memberSggcd);
+		});
+
+
+
+
+
+
+
+		/**
+		 * 특별시도 리스트
+		 */
+		function getSido() {
+			fetch('/members/api/getSido').then(response => {
+				if(response.ok) {
+					return response.json();
+				} else {
+					alert('문제가 발생하였습니다.');
+				}
+			}).then(json => {
+				let html = '';
+
+				if(!json.length){
+					alert('해당하는 정보가 존재하지 않습니다.');
+				} else {
+					json.forEach((obj, idx) => {
+						html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+					 `;
+					});
+				}
+
+				$('#sido').append(html);
+			});
+		}
+
+		/**
+		 * 특별시도 선택시 하위 시군구 출력
+		 */
+		function getSgg(){
+			$("#sido").on("change", function() {
+				const sido = $("#sido").val();
+				if (sido !== "") {
+					fetch(`/members/api/getSgg?sido=${sido}`).then(response => {
+						if(response.ok) {
+
+							return response.json();
+						}
+					}).then(json => {
+						let html = '';
+						if(!json.length) {
+
+						} else {
+							$('#sgg').empty();
+							
+							json.forEach((obj, idx) => {
+								html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+							 `;
+							})
+							$('#sgg').append(html);
+						}
+					});
+				}
+			});
+		}
+
+		function setMemberSgg(memberSggcd) {
+			let membersgg = memberSggcd;
+			fetch(`/members/api/getMemberSido?memberSgg=${membersgg}`).then(response => {
+				if(response.ok) {
+					return response.json();
+				}
+			}).then(json => {
+				let html = '';
+				
+				// api return이 list가 아니라서 dto 단독이라서 json.length 말고 json으로 return 체크
+				if(!json) {
+
+				} else {
+					
+					$('#sido').val(json.upprCd).trigger('change');
+					$('#sgg').val(json.sggCd);
+				}
+			});
+		}
+
+		function updateMemberInfo(){
+			const spaceName = $('#name').val();
+			const area = $('#area').val();
+			const sido = $('#sido').val();
+
+			if(spaceName.length < 1) {
+				alert('스페이스 이름을 입력해주세요.')
+				return false;
+			}
+			if(area === ""){
+				alert('관심 분야를 선택해주세요.')
+				return false;
+			}
+			if(sido === ""){
+				alert('취업 희망 지역을 선택해주세요.')
+				return false;
+			}
+
+			var params = {
+				spaceName : spaceName,
+				area : area,
+				sggCd : $('#sgg').val(),
+				allPublicYn : $('input[name=radio]:checked').val()
+			}
+
+			//
+
+
+
+		}
+
+
 
 		</script>
 </th:block>

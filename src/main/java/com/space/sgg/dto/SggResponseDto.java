@@ -12,10 +12,13 @@ public class SggResponseDto {
 
     private String sggNm;       //  시군구 이름
 
+    private String upprCd;      // 상위 시군구 코드
+
 
     public SggResponseDto(Sgg sgg) {
         this.sggCd = sgg.getSggCd();
         this.sggNm = sgg.getSggNm();
+        this.upprCd = sgg.getUpprCd();
     }
 
 

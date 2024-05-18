@@ -87,8 +87,8 @@ public class MypageController {
 		String memSpaceId = principalDetails.getMember().getSpaceId();
 		model.addAttribute("memSpaceId", memSpaceId);
 
-		String name = principalDetails.getMember().getName();
-		model.addAttribute("name", name);
+		//String name = principalDetails.getMember().getName();
+		//model.addAttribute("name", name);
 
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);
@@ -96,7 +96,7 @@ public class MypageController {
 
 		// 관심분야 및 지역
 		model.addAttribute("local", Area.values());
-		model.addAttribute("sgg", Sgg.values());
+		//model.addAttribute("sgg", Sgg.values());
 
 		int counts = 0;
 		for (int i = 0; i < lists.size(); i++) {

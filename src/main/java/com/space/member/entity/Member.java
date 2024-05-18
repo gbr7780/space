@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.space.member.constant.Area;
 import com.space.member.constant.Role;
-import com.space.member.dto.MemberFormDto;
 import com.space.member.dto.OauthAddInfoDto;
 import com.space.utils.entity.BaseEntity;
 
@@ -68,6 +67,10 @@ public class Member extends BaseEntity {
 
     // 프로필 사진
     private String image;
+
+    // 스페이스 네임
+    @Column(name="space_name")
+    private String spaceName;
     
     // 공개 여부
     @Column(name="member_allPublicYn")
@@ -80,18 +83,6 @@ public class Member extends BaseEntity {
 //    @OneToMany(mappedBy = "member")
 //    private List<Cash> cashs = new ArrayList<>();
 
-    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
-        Member member = new Member();
-        member.setName(memberFormDto.getName());
-        member.setEmail(memberFormDto.getEmail());
-        member.setArea(memberFormDto.getArea());
-        String password = passwordEncoder.encode(memberFormDto.getPassword());
-        member.setPassword(password);
-        member.setRole(Role.ADMIN);
-        member.setImage(memberFormDto.getImage());
-        return member;
-    }
-    
     public void addInfoOAuth2(OauthAddInfoDto addInfoDto) {
     	this.area = addInfoDto.getArea();
     	this.spaceId = addInfoDto.getSpaceId();
@@ -99,7 +90,7 @@ public class Member extends BaseEntity {
     }
      
     @Builder
-	public Member(String email, String password, Role role, String provider, String providerId,String name, int cash, int level, int point,String image,String allPublicYn) {
+	public Member(String email, String password, Role role, String provider, String providerId,String name,String image,String allPublicYn, String spaceName) {
 		this.email = email;
 		this.password = password;
 		this.role = role;
@@ -108,6 +99,7 @@ public class Member extends BaseEntity {
 		this.name = name;
 		this.image = image;
 		this.allPublicYn = allPublicYn;
+        this.spaceName = spaceName;
 	}
     
 }

@@ -95,16 +95,12 @@ public class MemberService implements UserDetailsService {
 	}
 
 	// 프로필 수정(이미지 변경 안할 경우)
-	public Member updateProfile(Member member, MemberUpdateDto memberUpdateDto) {
-//		member.setBnumber(memberUpdateDto.getBnumber());
-//		member.setBname(memberUpdateDto.getBname());
-//		member.setAddress(memberUpdateDto.getAddress());
-//		member.setPnum(memberUpdateDto.getPnum());
-		
+	public void updateProfile(Member member, MemberUpdateDto memberUpdateDto) {
+
 		member.setName(memberUpdateDto.getName());
 		member.setArea(memberUpdateDto.getArea());
 		member.setAllPublicYn(memberUpdateDto.getAllPublicYn());
-		return memberRepository.save(member);
+
 	}
 
 	// public Member saveOAuth2()
@@ -151,5 +147,20 @@ public class MemberService implements UserDetailsService {
 	public List<SggResponseDto> getSgg(String sido) {
 		List<Sgg> lists = sggRepository.getSggList(sido);
 		return lists.stream().map(SggResponseDto::new).collect(Collectors.toList());
+	}
+
+	/**
+	 * 회원 sgg 코드를 이용해여 sido코드 값 리턴하는 함수
+	 * @param memberSgg
+	 * @return sido에 대한 sgg코드
+	 */
+	public SggResponseDto getMemberSido(String memberSgg) {
+		return sggRepository.findBySggCd(memberSgg);
+	}
+
+
+
+	public void updateProfile(Long id, MemberUpdateDto params) {
+
 	}
 }
