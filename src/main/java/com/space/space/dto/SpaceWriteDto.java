@@ -12,6 +12,6 @@ public class SpaceWriteDto {
 	
 	private String content;
 	
-	private String categoryYn;
+	private String openYn;
 	
 }

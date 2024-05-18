@@ -44,7 +44,6 @@ public class CategoryApiController {
     @PatchMapping("/update")
     public List<CategoryDto> categoryUpdate(@RequestBody final List<CategoryDto> dtoList) {
         categoryService.update(dtoList);
-//        return categoryService.update(id, params);
         return dtoList;
     }
 }

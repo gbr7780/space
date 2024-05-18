@@ -41,7 +41,7 @@ import com.space.mypage.constant.PrivateYn;
 import com.space.member.dto.MemberUpdateDto;
 import com.space.mypage.category.entity.Category;
 import com.space.mypage.category.repository.CategoryRepository;
-import com.space.mypage.service.SpaceService;
+import com.space.mypage.space.service.SpaceService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -109,56 +109,12 @@ public class MypageController {
 		return "myPage/mypageMain";
 	}
 
-	// 마이페이지 - 스페이스 관리
-	@GetMapping("/spaceEdit")
-	public String mypageSpaceEdit(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-
-		String spaceId = principalDetails.getMember().getSpaceId();
-		model.addAttribute("spaceId", spaceId);
-
-		String name = principalDetails.getMember().getName();
-		model.addAttribute("name", name);
-
-		Long id = principalDetails.getMember().getId();
-		Member member = memberRepository.findMemberById(id);
-		model.addAttribute("member", member);
-
-		List<Space> lists = spaceRepository.findAll();
-		model.addAttribute("lists", lists);
-
-		// 카테고리 출력
-		List<Category> list = categoryRepository.findAll();
-		List<String> categorys = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-		List<Long> categorysIds = new ArrayList<>(); // 로그인한 사용자의 카테고리 ID 저장 리스트
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getMember().getId().equals(principalDetails.getMember().getId())) {
-				String categoryName = list.get(i).getType();
-				Long categorysId = list.get(i).getId();
-				categorys.add(categoryName); // 리스트에 카테고리 이름 저장
-				categorysIds.add(categorysId); // 리스트에 카테고리 이름 저장
-			}
-		}
-		model.addAttribute("categorys1", categorys.get(0));
-		model.addAttribute("categorys2", categorys.get(1));
-		model.addAttribute("categorys3", categorys.get(2));
-		model.addAttribute("categorys4", categorys.get(3));
-		model.addAttribute("categorys5", categorys.get(4));
-
-		model.addAttribute("categorysID1", categorysIds.get(0));
-		model.addAttribute("categorysID2", categorysIds.get(1));
-		model.addAttribute("categorysID3", categorysIds.get(2));
-		model.addAttribute("categorysID4", categorysIds.get(3));
-		model.addAttribute("categorysID5", categorysIds.get(4));
-
-		return "myPage/mypagespaceEdit";
-	}
-
 	// 마이페이지 - 스페이스 삭제
 	@GetMapping(value = "/spaceEdit/delete/{id}")
 	public String spaceDelete(@PathVariable("id") Long id) {
 		log.info(">>>>>>>>>>  스페이스 삭제 컨트롤러 접근");
 		spaceService.deletespace(id);
-		return "redirect:mypage/spaceEdit";
+		return "redirect:mypage/space";
 	}
 
 	// 마이페이지 - 설정
@@ -306,13 +262,13 @@ public class MypageController {
 	public String mypageWritePost(@AuthenticationPrincipal PrincipalDetails principalDetails,
 			SpaceWriteDto categoryWriteDto, Model model,
 			@RequestParam(value = "radio", required = false) String radio) {
-		categoryWriteDto.setCategoryYn(radio);
+		categoryWriteDto.setOpenYn(radio);
 		String category_id = categoryWriteDto.getCategory();
 //		log.info(">>>>>>>>>>>>>>> id" + category_id);
 		Space content = Space.createContent(categoryWriteDto);
 		spaceService.saveSpace(principalDetails, content, category_id);
 
-		return "redirect:/mypage/spaceEdit";
+		return "redirect:/mypage/space";
 	}
 
 	/**

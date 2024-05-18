@@ -21,7 +21,7 @@ import com.space.member.constant.Role;
 import com.space.member.entity.Member;
 import com.space.member.repository.MemberRepository;
 import com.space.mypage.category.entity.Category;
-import com.space.mypage.service.SpaceService;
+import com.space.mypage.space.service.SpaceService;
 
 @Service
 @Slf4j

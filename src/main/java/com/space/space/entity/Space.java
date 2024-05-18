@@ -30,9 +30,9 @@ public class Space {
 	@Column(name = "content")
 	private String content;
 
-	// 카테고리 공개,비공개
-	@Column(name = "categoryYn")
-	private String categoryYn;
+	// 스페이스 공개 여부
+	@Column(name = "open_yn")
+	private String openYn;
 
 	// 다대일관계 카테고리
 	@ManyToOne
@@ -48,7 +48,7 @@ public class Space {
 	public static Space createContent(SpaceWriteDto spaceWriteDto) {
 		Space content = new Space();
 		content.setContent(spaceWriteDto.getContent());
-		content.setCategoryYn(spaceWriteDto.getCategoryYn());
+		content.setOpenYn(spaceWriteDto.getOpenYn());
 		content.setTitle(spaceWriteDto.getTitle());
 		return content;
 	}
