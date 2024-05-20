@@ -94,16 +94,6 @@ public class MemberService implements UserDetailsService {
 		return memberRepository.save(member);
 	}
 
-	// 프로필 수정(이미지 변경 안할 경우)
-	public void updateProfile(Member member, MemberUpdateDto memberUpdateDto) {
-
-		member.setName(memberUpdateDto.getName());
-		member.setArea(memberUpdateDto.getArea());
-		member.setAllPublicYn(memberUpdateDto.getAllPublicYn());
-
-	}
-
-	// public Member saveOAuth2()
 
 	// UserDetailsService 인터페이스의 오버라이딩한다. 로그인할 유저의 email을 파라미터로 전달함( 이름은 동명이인이 있을수
 	// 있기 때문에)
@@ -161,6 +151,10 @@ public class MemberService implements UserDetailsService {
 
 
 	public void updateProfile(Long id, MemberUpdateDto params) {
-
+		Member member = memberRepository.findMemberById(id);
+		member.setSpaceName(params.getSpaceName());
+		member.setArea(params.getArea());
+		member.setAllPublicYn(params.getAllPublicYn());
+		member.setSggCd(params.getSggCd());
 	}
 }
