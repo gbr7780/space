@@ -56,8 +56,6 @@ public class MemberApiController {
     @PostMapping("/addLoginInfo")
     public void addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,@RequestBody OauthAddInfoDto params) {
         memberService.addInfo(principalDetails, params);
-        //String spaceUrl = params.getSpaceId();
-        //return spaceUrl;
     }
 
     @PostMapping("/updateMemberInfo")

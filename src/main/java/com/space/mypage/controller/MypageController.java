@@ -92,6 +92,8 @@ public class MypageController {
 
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);
+
+
 		model.addAttribute("member", member);
 
 		// 관심분야 및 지역
@@ -128,52 +130,6 @@ public class MypageController {
 		model.addAttribute("memberUpdateDto", new MemberUpdateDto());
 
 		return "myPage/mypageSetting";
-	}
-
-	// 마이페이지 - 설정
-	@PostMapping("/setting/insert_image")
-	public String image_insert(@AuthenticationPrincipal PrincipalDetails principalDetails,
-			MemberUpdateDto memberUpdateDto, HttpServletRequest request, Model model,
-			@RequestParam(value = "radio", required = false) String radio) throws Exception {
-
-//		log.info("===============>name : " + memberUpdateDto.getName());
-//		log.info("===============>getAllPublicYn : " + memberUpdateDto.getAllPublicYn());
-//		log.info("===============>Area : " + memberUpdateDto.getArea());
-//		log.info("===============>Filename : " + memberUpdateDto.getFilename());
-
-		memberUpdateDto.setAllPublicYn(radio);
-		Long id = principalDetails.getMember().getId();
-		Member member = memberRepository.findMemberById(id);
-
-		// 파일의 오리지널 네임
-		// String originalFileName = mFile.getOriginalFilename();
-		// String ext = originalFileName.substring(originalFileName.indexOf("."));
-		String originalFileName = memberUpdateDto.getFilename().getOriginalFilename();
-
-		// 이미지 수정 안 하는 경우
-		if (originalFileName.equals("")) {
-			memberService.updateProfile(member, memberUpdateDto);
-		}
-		// 이미지 수정 하는 경우
-		else {
-			String ext = originalFileName.substring(originalFileName.indexOf("."));
-			String newFileName = UUID.randomUUID() + ext;
-			String uploadPath = "/mypage/setting/" + newFileName;
-
-			try {
-				if (member.getImage() != null) { // 이미 프로필 사진이 있을경우
-					File file = new File(profileImgLocation + member.getImage()); // 경로 + 유저 프로필사진 이름을 가져와서
-					file.delete(); // 원래파일 삭제
-				}
-				// mFile.transferTo(new File(profileImgLocation + newFileName)); // 경로에 업로드
-				memberUpdateDto.getFilename().transferTo(new File(profileImgLocation + newFileName)); // 경로에 업로드
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			memberService.updateImage(member, uploadPath, memberUpdateDto);
-		}
-
-		return "redirect:/myPage/setting";
 	}
 
 	// 마이페이지 - 작성하기
