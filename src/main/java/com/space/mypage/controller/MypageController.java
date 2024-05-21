@@ -286,21 +286,6 @@ public class MypageController {
 		return "/myPage/mypageJob";
 	}
 
-	/**
-	 * 24.05.07 KJH
-	 * 외부 스페이스
-	 * @param principalDetails
-	 * @param model
-	 * @return mypageExternal.html
-	 */
-	@GetMapping("/external")
-	public String mypageExternal(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
-		Long id = principalDetails.getMember().getId();
-		Member member = memberRepository.findMemberById(id);
-		model.addAttribute("member", member);
-		return "/myPage/mypageExternal";
-	}
-
 	// ckeditor 이미지 처리
 	@PostMapping(value = "/image/upload")
 	public ModelAndView image(MultipartHttpServletRequest request) throws Exception {

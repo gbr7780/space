@@ -33,9 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CategoryPageController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
     private MemberRepository memberRepository;
 
     // 카테고리 리스트 조회

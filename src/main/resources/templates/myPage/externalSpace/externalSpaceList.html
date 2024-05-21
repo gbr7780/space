@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layouts/mypageLayout}">
+<th:block layout:fragment="css">
+	<!--dataTables-->
+	<link rel="stylesheet" type="text/css" href="/css/dataTables.css">
+</th:block>
+<th:block layout:fragment="content">
+
+	<h2 style="font-weight: bold; margin-left: 200px;">[&nbsp;&nbsp;&nbsp;외부스페이스&nbsp;&nbsp;&nbsp;]</h2>
+	<div style="border: 1px solid #023476; background-color: white; float: center; height: 470px; width: 800px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
+		<!-- 검색창 -->
+		<div style="float: right; width: 35%; margin-top: 23px; margin-left: 20px; margin-right: 30px">
+			<div class="search" style="width: 100%;">
+				<input class="search_text" type="text" placeholder="검색어 입력"
+					   style="height: 50px;"> <img class="search_img"
+												   src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
+												   style="height: 30px; width: 30px;">
+			</div>
+		</div>
+
+		<!-- 검색 조건 -->
+		<div style="float: right; width: 25%; margin-top: 23px;">
+			<select class="form-select border-1" style="height: 50px; width: 180px; margin-left: 20px;">
+				<option selected value="">관심분야</option>
+				<option th:each="area : ${local}" th:value="${area}" th:text="${area}"></option>
+			</select>
+		</div>
+
+		<div class="tblist">
+			<table id="dataTable" class="display hover" style="padding-top:10px; width: 100% !important; cursor:pointer;">
+				<caption>외부스페이스 목록</caption>
+				<colgroup>
+					<col style="width:30%" />
+					<col style="width:40%" />
+					<col style="width:30%" />
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">카테고리</th>
+					<th scope="col">스페이스명</th>
+					<th scope="col">조회수</th>
+				</tr>
+				</thead>
+			</table>
+		</div>
+
+
+
+
+		<!--		<div>-->
+<!--			<div style="float: left; width: 62%; margin-top: 5px;">-->
+<!--				<div class="spaceTitle" style="width: 400px; font-size: 23px; letter-spacing: 4px; text-align: left; margin-left: 20px; float: left; border: none;">-->
+<!--					test-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>-->
+
+
+		<div id="list"></div>
+	</div>
+</th:block>
+<th:block layout:fragment="script">
+	<!--dataTables-->
+	<script src="/js/dataTables.js"></script>
+	<script th:inline="javascript">
+
+		$(function () {
+			// 목록 - 자료 목록 조회
+			var table = $('#dataTable').DataTable({
+				"dom": '<"top"if>rt<"bottom"p><"clear">',
+				"language": {
+					"emptyTable": "데이터가 없습니다.",
+					"lengthMenu": "페이지당 _MENU_ 개씩 보기",
+					"info": "<input type='hidden' id='temp' value='_TOTAL_'/>",
+					"infoEmpty": "데이터 없음",
+					"infoFiltered": "<input type='hidden' id='filtered' value='_MAX_'>",
+					"search": " ",
+					"searchPlaceholder": "검색어를 입력하세요.",
+					"zeroRecords": "일치하는 데이터가 없습니다.",
+					"loadingRecords": "로딩중...",
+					"processing": "잠시만 기다려 주세요...",
+				},
+				ajax: function(data, callback, settings) {
+					fetch('/mypage/externalSpace/api/list')
+							.then(response => {
+								if (!response.ok) {
+								}
+
+								console.log(">> : " + response);
+								return response.json();
+							})
+							.then(json => {
+								// 서버 응답 데이터의 구조를 확인하고 기본값을 설정합니다.
+								const response = {
+									draw: data.draw,
+									recordsTotal: json.recordsTotal || 0,
+									recordsFiltered: json.recordsFiltered || 0,
+									data: json
+								};
+								debugger;
+								console.log("<< : " + response);
+								callback(response);
+							})
+							.catch(error => {
+								console.error('Error fetching data:', error);
+								// 응답이 실패한 경우 빈 데이터를 반환하여 DataTables가 올바르게 처리되도록 합니다.
+								callback({
+									draw: data.draw,
+									recordsTotal: 0,
+									recordsFiltered: 0,
+									data: []
+								});
+							});
+				},
+				columns: [
+					{
+						target: 0, data: "area",
+						"className": "text-center" // 중앙
+					},
+					{
+						target: 1, data: "spaceName",
+						"className": "text-center" // 중앙
+					},
+					{
+						target: 2, data: "hitCount",
+						"className": "text-center" // 중앙
+					}
+				],
+				pagingType: 'full_numbers' // 페이징 처음으로, 마지막으로 추가
+			});
+			// dataTable 자체 search input 없애기
+			$('.dataTables_filter').remove();
+		})
+
+	</script>
+
+</th:block>
+</html>

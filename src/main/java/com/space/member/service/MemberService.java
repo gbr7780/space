@@ -1,11 +1,14 @@
 package com.space.member.service;
 
+import com.space.member.dto.MemberExternalDto;
 import com.space.member.dto.MemberUpdateDto;
+import com.space.mypage.category.dto.CategoryDto;
 import com.space.sgg.dto.SggResponseDto;
 import com.space.sgg.entity.Sgg;
 import com.space.sgg.repository.SggRepository;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 @Transactional
 //final이나 NonNull 붙은 필드에 생성자를 생성해줌
 @RequiredArgsConstructor
-
+@Slf4j
 //UserDetailsService는 데이터베이스에서 회원정보를 가져오는 역할 (즉, 시큐리티에서 로그인 담당한다고 생각하면 됨)
 public class MemberService implements UserDetailsService {
 	// 빈에 생성자가 1개이고 생성자의 파라미터 타입이 빈으로 등록이 가능하면 @Autowired 없이 의존성 주입 가능
@@ -163,4 +166,18 @@ public class MemberService implements UserDetailsService {
 	public void updateProfile(Long id, MemberUpdateDto params) {
 
 	}
+
+	// 외부 스페이스 목록 조회
+    public List<MemberExternalDto> externalSpaceList(String openYn) {
+		List<Member> lists = memberRepository.findMemberByAllPublicYn(openYn);
+		return lists.stream().map(MemberExternalDto::new).collect(Collectors.toList());
+    }
+
+    public List<MemberExternalDto> externalSpaceList() {
+//		List<Member> lists = memberRepository.findExternalSpaceList();
+		List<MemberExternalDto> lists = memberRepository.findExternalSpaceList();
+		log.info(">>>> lists" + lists);
+		return lists;
+//		return lists.stream().map(MemberExternalDto::new).collect(Collectors.toList());
+    }
 }
