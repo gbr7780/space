@@ -36,9 +36,10 @@ public class MemberExternalDto {
         this.spaceName = member.getSpaceName();
     }
 
-    public MemberExternalDto(String spaceName, Area area, Long hitCount) {
+    public MemberExternalDto(String spaceName, Area area, Long hitCount, String spaceId) {
         this.spaceName = spaceName;
         this.area = area;
         this.hitCount = hitCount;
+        this.memberSpaceId = spaceId;
     }
 }
