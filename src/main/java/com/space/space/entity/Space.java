@@ -27,7 +27,7 @@ public class Space {
 	private String title;
 
 	// 스페이스 내용
-	@Column(name = "content")
+	@Column(columnDefinition = "TEXT", name = "content")
 	private String content;
 
 	// 스페이스 공개 여부

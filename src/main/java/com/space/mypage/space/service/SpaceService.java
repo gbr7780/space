@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import com.space.mypage.space.dto.SpaceListDto;
+import com.space.space.dto.SpaceResponseDto;
 import com.space.space.entity.Space;
 import com.space.space.repository.SpaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,10 @@ public class SpaceService {
 		} else {
 			throw new NullPointerException();
 		}
+	}
+
+	public List<SpaceResponseDto> findSpcaeAll(Long memberId) {
+		return spaceRepository.findSpcaeAll(memberId);
 	}
 
 }

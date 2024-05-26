@@ -12,8 +12,10 @@
 	<link
 			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 			rel="stylesheet">
-	<link th:href="@{/myPage/css/sb-admin-2.min.css}" rel="stylesheet">
 
+	<!--
+	<link th:href="@{/myPage/css/sb-admin-2.min.css}" rel="stylesheet">
+	-->
 	<style>
 		footer {
 			margin-bottom: 20px;
@@ -25,11 +27,11 @@
 
 <th:block layout:fragment="content">
 
-	<h2 style="font-weight: bold; margin-left: 100px; color: black;">[&nbsp;&nbsp;&nbsp;방문자 통계&nbsp;&nbsp;&nbsp;]</h2>
+	<h2 style="font-weight: bold; margin-left: 160px; color: black;">[&nbsp;&nbsp;&nbsp;방문자 통계&nbsp;&nbsp;&nbsp;]</h2>
 	<div
-		style="background-color: white; float: center; height: 450px; width: 800px; margin-right: 15px; margin-left: 100px; margin-top: 30px; text-align: center;">
+		style="background-color: white; float: center;  width: 800px; margin-right: 15px; margin-left: 160px; margin-top: 30px; text-align: center;">
 		<!-- Area Chart -->
-		<div class="card shadow mb-4" style="width: 900px;">
+		<div class="card shadow mb-4" style="width: 900px">
 			<div class="card-header py-3">
 				<div class="m-0 font-weight-bold text-primary"
 					style="float: left; width: 33%; margin-top: 20px; margin-bottom: 10px;">
@@ -68,7 +70,7 @@
 			</div>
 			<div class="card-body">
 				<div class="chart-area">
-					<canvas id="myAreaChart"></canvas>
+					<canvas id="myAreaChart" style="height: 350px;width: 900px"></canvas>
 				</div>
 				<hr>
 			</div>
@@ -77,8 +79,8 @@
 
 	</div>
 	<br> <br> <br> <br>
-	<h2 style="font-weight: bold; margin-left: 100px; color: black;">[&nbsp;&nbsp;&nbsp;설정&nbsp;&nbsp;&nbsp;]</h2>
-	<div style="border: 1px solid #094B80; background-color: white; float: center; height: 350px; width: 900px; margin-right: 15px; margin-left: 100px; margin-top: 30px; text-align: center;">
+	<h2 style="font-weight: bold; margin-left: 160px; color: black;">[&nbsp;&nbsp;&nbsp;설정&nbsp;&nbsp;&nbsp;]</h2>
+	<div style="border: 1px solid #094B80; background-color: white; float: center; height: 350px; width: 900px; margin-right: 15px; margin-left: 160px; margin-top: 30px; text-align: center;">
 		<!-- 스페이스 이름 -->
 		<div style="text-align: left; margin-left: 45px; margin-top: 23px;margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >스페이스 이름</div>
 
@@ -88,7 +90,7 @@
 		<!-- 관심 분야 -->
 		<div style="float : left; width: 35%; text-align: left; margin-left: 45px; margin-top: 43px; margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >관심 분야</div>
 		<!-- 취업 희망 지역 -->
-		<div style="float : right; width: 44%; text-align: left;  margin-top: 43px; margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >취업 희망 지역</div>
+		<div style="float : right; width: 50%; text-align: left;  margin-top: 43px; margin-bottom: 8px; font-size: 20px; font-weight: bold; color: black;" >취업 희망 지역</div>
 		<select class="form-select " id="area"  aria-label="Default select example" style="float: left;margin-left: 45px;padding-top:5px;width: 250px;height: 35px">
 			<option value="">분야</option>
 			<option th:each="area : ${local}" th:value="${area}" th:text="${area}" th:selected="${area} == ${member.area}"></option>
@@ -279,6 +281,7 @@
 		    }],
 		  },
 		  options: {
+			  responsive: false,
 		    maintainAspectRatio: false,
 		    layout: {
 		      padding: {

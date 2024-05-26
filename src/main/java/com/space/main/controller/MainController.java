@@ -9,6 +9,7 @@ import com.space.member.service.MemberService;
 import com.space.mypage.category.entity.Category;
 import com.space.mypage.category.repository.CategoryRepository;
 import com.space.mypage.space.service.SpaceService;
+import com.space.space.dto.SpaceResponseDto;
 import com.space.space.entity.Space;
 import com.space.space.repository.SpaceRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,9 @@ public class MainController {
         Long memid = principalDetails.getMember().getId();
         Member memMember = memberRepository.findMemberById(memid);
         model.addAttribute("memMember", memMember);
+
+        List<SpaceResponseDto> spaceLists = spaceService.findSpcaeAll(memid);
+        model.addAttribute("spaceLists", spaceLists);
 
         // 스페이스 계정에 대한 정보
         List<Member> list = memberRepository.findAll();
@@ -151,6 +155,8 @@ public class MainController {
                 titleList.add(conttitle); // 리스트에 카테고리 이름 저장
             }
         }
+
+
         model.addAttribute("titleList", titleList);
         model.addAttribute("conList1", conList1);
         model.addAttribute("conList2", conList2);

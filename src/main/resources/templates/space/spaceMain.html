@@ -89,6 +89,21 @@ body::-webkit-scrollbar {
 	height: 72px;
 	box-sizing: border-box;
 }
+table {
+	width: 100%;
+	border: 1px solid #444444;
+	border-collapse: collapse;
+}
+.table td {
+	border-top : 1px solid #444444;
+}
+th, td {
+	border: 1px solid #444444;
+	padding: 10px;
+}
+.my-auto {
+	width: 70%
+}
 
 </style>
 
@@ -179,11 +194,11 @@ body::-webkit-scrollbar {
 			<section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
 				<div class="my-auto" >
 					<h2 class="mb-5 space-title" th:text="${categorys1}">보유기술</h2>
-					
-					<div th:each="vo : ${conList1}">
-					<p th:text="${vo}" style="font-size:30px; color:black;">-</p>
-					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
-					<hr>
+
+					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys1}">
+						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
+						<div th:utext="${vo.content}" style="color: black"></div>
+						<br><br><br>
 					</div>
 				</div>
 			</section>
@@ -192,11 +207,11 @@ body::-webkit-scrollbar {
 				id="experience">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys2}">프로젝트</h2>
-					
-					<div th:each="vo1 : ${conList2}">
-					<p th:text="${vo1}" style="font-size:30px; color:black;">-</p>
-					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
-					<hr>
+
+					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys2}">
+						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
+						<div th:utext="${vo.content}" style="color: black"></div>
+						<br><br><br>
 					</div>
 
 				</div>
@@ -208,11 +223,19 @@ body::-webkit-scrollbar {
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys3}">대외활동</h2>
 
+
+					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys3}">
+						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
+						<div th:utext="${vo.content}" style="color: black"></div>
+						<br><br><br>
+					</div>
+
+					<!--
 					<div th:each="vo3 : ${conList3}">
 					<p th:text="${vo3}" style="font-size:30px; color:black;">-</p>
-					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
 					<hr>
 					</div>
+					-->
 
 				</div>
 			</section>
@@ -222,10 +245,10 @@ body::-webkit-scrollbar {
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys4}">수상자격 / 자격증</h2>
 
-					<div th:each="vo4 : ${conList4}">
-					<p th:text="${vo4}" style="font-size:30px; color:black;">-</p>
-					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
-					<hr>
+					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys4}">
+						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
+						<div th:utext="${vo.content}" style="color: black"></div>
+						<br><br><br>
 					</div>
 				</div>
 			</section>
@@ -234,10 +257,10 @@ body::-webkit-scrollbar {
 				id="interests">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys5}">보유기술</h2>
-					<div th:each="vo5 : ${conList5}">
-					<p th:text="${vo5}" style="font-size:30px; color:black;">-</p>
-					<!-- <p th:text="${vo1}" style="font-size:25px;">매칭, 예약, 레벨, 캐시, 매너 점수, 챗봇 시스템을 도입 후 배드민턴 경기 전/ 후 불편함 해소할 수 있는 서비스 개발</p> -->
-					<hr>
+					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys5}">
+						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
+						<div th:utext="${vo.content}" style="color: black"></div>
+						<br><br><br>
 					</div>
 				</div>
 			</section>
