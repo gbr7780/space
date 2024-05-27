@@ -28,7 +28,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     List<Member> findMemberByAllPublicYn(String openYn);
 
     // 외부 스페이스 목록 조회
-    @Query("select new com.space.member.dto.MemberExternalDto(m.spaceName, m.area, COUNT(h)) FROM Member m JOIN HitCount h ON m.spaceId = h.spaceId WHERE m.allPublicYn = 'Y' GROUP BY m.spaceName, m.area")
+    @Query("select new com.space.member.dto.MemberExternalDto(m.spaceName, m.area, COUNT(h), m.spaceId) FROM Member m JOIN HitCount h ON m.spaceId = h.spaceId WHERE m.allPublicYn = 'Y' GROUP BY m.spaceName, m.area, m.spaceId")
     List<MemberExternalDto> findExternalSpaceList();
 
     // 조회수 증가
