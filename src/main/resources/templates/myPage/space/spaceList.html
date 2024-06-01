@@ -2,22 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layouts/mypageLayout}">
+<th:block layout:fragment="css">
+    <!--dataTables-->
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.css">
+    <style>
+        /* popup*/
+        .bg_mask{background:rgba(0,0,0,.6);position:absolute;top:0;bottom:0;left:0;right:0;z-index:9999999}
+        .popup{border:1px solid #1c223a; background:#fff;position:absolute;top:40%;left:60%;width:80%;transform:translateX(-50%) translateY(-50%)}
+        .popup .pop_top {background:#023476;color:#fff;position:relative;text-indent:20px;font-size:1rem;line-height:45px}
+        .popup .pop_top .btnpClose{position:absolute;top:50%;right:0px;width:34px;text-align:center;text-indent:0;display:block;transform:translateY(-50%);height: 34px;line-height: 32px;}
+        .p_btn {padding: 0 0 10px;text-align:center}
+        .popup .alert_top {position:relative;line-height:12px}
+        .popup .alert_top .btnpClose{position:absolute;top:7px;right:0px;bottom:0;width:34px;text-align:center;text-indent:0}
+        .alertbx p{padding-left:0px}
+        .tbview {line-height:1.3;border-top:1px solid #dee3e9;margin: 25px;}
+        .tbview table{width:100%;}
+        .tbview tbody th {padding:8px 10px; color:#0059a5;font-weight:400;border-right:1px solid #dee3e9; border-bottom:1px solid #dee3e9; background-color:#f2f6fb;}
+        .tbview tbody td {padding:8px 10px; color:#333; border-right:1px solid #dee3e9; border-bottom:1px solid #dee3e9;min-height:20px;}
+        .tbview thead th:last-child, .tbview tbody th:last-child, .tbview tbody td:last-child{border-right:none}
+        .tbview th span{color: #fe4f14;}
+
+        .tbview td select{width:100%}
+
+        .popup {
+            /*팝업 배경*/
+            display: none; /*평소에는 보이지 않도록*/
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+        .popup .modal_popup {
+            /*팝업*/
+            position: absolute;
+            top: 40%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+        }
+
+    </style>
+</th:block>
 
 <th:block layout:fragment="content">
 
     <h2 style="font-weight: bold; margin-left: 200px;">[&nbsp;&nbsp;&nbsp;스페이스 관리&nbsp;&nbsp;&nbsp;]</h2>
-    <div style="border: 1px solid #094B80; background-color: white; float: center; height: 100%; width: 800px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
-        <!-- 검색 -->
-        <div style="float: left; width: 5%; margin-top: 35px; margin-left: 20px;">
-            <input type="checkbox" name="titleCheck" value="1"
-                   style="width: 24px; height: 24px;">
+    <div style="border: 1px solid #094B80; background-color: white; float: center; height: 474px; width: 800px; margin-right: 15px; margin-left: 200px; margin-top: 30px; margin-bottom: 10px; text-align: center;">
+
+        <div style="float: left; width: 8%; margin-top: 35px; margin-left: 20px;">
         </div>
 
+        <!-- 검색 조건 -->
         <div style="float: left; width: 25%; margin-top: 23px;">
-            <select class="form-select border-1" style="height: 50px; width: 180px; margin-left: 20px;">
-                <option selected>공개 여부</option>
-                <option value="1">공개</option>
-                <option value="2">비공개</option>
+            <select class="form-select border-1" id="srch_rqr1" style="height: 50px; width: 180px; margin-left: 20px;">
+                <option value="" selected>공개 여부</option>
+                <option value="Y">공개</option>
+                <option value="N">비공개</option>
             </select>
         </div>
 
@@ -28,7 +71,7 @@
         <div style="float: left; width: 35%; margin-top: 23px; margin-left: 20px;">
             <!-- 검색창 -->
             <div class="search" style="width: 100%;">
-                <input class="search_text" type="text" placeholder="검색어 입력"
+                <input class="search_text" id="search_wrd" type="text" placeholder="검색어 입력"
                        style="height: 50px;"> <img class="search_img"
                                                    src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
                                                    style="height: 30px; width: 30px;">
@@ -36,82 +79,322 @@
         </div>
 
         <br> <Br> <Br>
-        <hr style="color: #094B80;">
+        <hr style="color: #094B80; margin-bottom: 0px;">
 
-
-        <!-- space 목록 -->
-        <div id="list">
-
+        <!-- 목록 -->
+        <div class="tblist">
+            <table id="spaceTable" class="display hover" style="width: 100% !important; cursor:pointer;">
+                <colgroup>
+                    <col style="width:10%" />
+                    <col style="width:25%" />
+                    <col style="" />
+                    <col style="width:25%" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th style="text-align:center;"><input type="checkbox" id="checkAll" /></th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">공개여부</th>
+                </tr>
+                </thead>
+            </table>
         </div>
 
-                <!--
-                <div style="float: left; width: 30%; margin-top: 5px;">
-                <a href="/mypage/spaceEdit/update/" th:attrappend="href=${vo.id}">
-                    <button type="button" class="btn btn-space"
-                        style="width: 100px; margin-right: 7px;" onclick="check();">수&nbsp;정</button>
-                        </a>
-                        <a href="/mypage/spaceEdit/delete/" th:attrappend="href=${vo.id}">
-                    <button type="button" class="btn btn-space" style="width: 100px;"
-                        onclick="alert('스페이스가 삭제되었습니다.');">삭&nbsp;제</button></a>
-                </div>
-                -->
-        <br>
+        <!--
+        <div style="float: left; width: 30%; margin-top: 5px;">
+        <a href="/mypage/spaceEdit/update/" th:attrappend="href=${vo.id}">
+            <button type="button" class="btn btn-space"
+                style="width: 100px; margin-right: 7px;" onclick="check();">수&nbsp;정</button>
+                </a>
+                <a href="/mypage/spaceEdit/delete/" th:attrappend="href=${vo.id}">
+            <button type="button" class="btn btn-space" style="width: 100px;"
+                onclick="alert('스페이스가 삭제되었습니다.');">삭&nbsp;제</button></a>
+        </div>
+        -->
 
 
     </div>
     <a href="/mypage/write">
         <button type="button" class="btn btn-space"
-                style="width: 120px;float: right;margin-right: 76px;margin-top : 5px">작성
+                style="width: 120px;float: right;margin-right: 50px;margin-top : 5px">작성
         </button>
     </a>
-    <button type="button" class="btn btn-space" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px">
+    <button type="button" id="btn_delete" class="btn btn-space" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px">
         삭제
     </button>
-    <button type="button" class="btn btn-space" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px">
+    <button type="button" id="btn_update" class="btn btn-space" style="width: 120px;float: right;margin-right: 10px;margin-top : 5px">
         일괄수정
     </button>
-    <br> <br>
-    <!--
-    <div style="float: right; margin-right: 0px;">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination" style="margin-right: 70px; width: 210px;">
-                <li class="page-item" style="border: none;"><a
-                    class="page-link" href="#" aria-label="Previous"> <span
-                        aria-hidden="true" style="color: #094B80;">◀</span>
-                </a></li>
-                <li class="page-item" style="border: none;"><a
-                    class="page-link" href="#" style="color: #094B80;">1</a></li>
-                <li class="page-item" style="border: none;"><a
-                    class="page-link" href="#" style="color: #094B80;">2</a></li>
-                <li class="page-item" style="border: none;"><a
-                    class="page-link" href="#" style="color: #094B80;">3</a></li>
-                <li class="page-item" style="border: none;"><a
-                    class="page-link" href="#" aria-label="Next"> <span
-                        aria-hidden="true" style="color: #094B80;">▶</span>
-                </a></li>
-            </ul>
-        </nav>
-    </div>
-    -->
-    <!--			<br> <br>-->
-    <!--
-<div th:replace="fragments/mypageFooter::footer"></div>
--->
-</th:block>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            category_list();
-            list();
-        });
 
-        const params= {
-            memberId : /*[[ ${memId} ]]*/
+    <!-- 일괄수정 팝업 -->
+    <div class="popup">
+        <div class="modal_popup">
+        <p class="pop_top">스페이스 일괄 수정<a href="#" class="btnpClose"><img src="/img/close.png" alt="닫기" style="margin-right:10px; width:60%;" onClick="javascript:popClose();" /></a></p>
+        <div class="p_cont">
+            <form method="post" id="writeForm">
+                <div class="tbview">
+                    <table>
+                        <colgroup>
+                            <col style="width:15%" />
+                            <col style="width:85%" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>카테고리</th>
+                            <td>
+                                <select class="form-select border-1 category_list" id="category_list2" style="height: 40px;">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>공개여부</th>
+                            <td>
+                                <select class="form-select border-1" id="select_open" style="height: 40px;">
+                                    <option value="" selected>공개 여부</option>
+                                    <option value="Y">공개</option>
+                                    <option value="N">비공개</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div class="p_btn">
+            <button class="btn btn-space" onclick="javascript:popClose();" style="width:15%; opacity : 0.7">취소</button>
+            <button class="btn btn-space" onclick="fn_update();" style="width:15%;">확인</button>
+        </div>
+        </div>
+    </div>
+    <!-- /일괄 수정 팝업  -->
+</th:block>
+
+<th:block layout:fragment="script">
+    <!--dataTables-->
+    <script src="/js/dataTables.js"></script>
+    <script th:inline="javascript">
+
+        $(function () {
+            popClose();
+
+            // 카테고리 리스트 조회
+            category_list('category_list');
+
+            // 목록
+            var table = $('#spaceTable').DataTable({
+                "dom": '<"top"f>rt<"bottom"p><"clear">',
+                pageLength: 7,
+                "language": {
+                    "emptyTable": "데이터가 없습니다.",
+                    "lengthMenu": "페이지당 _MENU_ 개씩 보기",
+                    "info": "<input type='hidden' id='temp' value='_TOTAL_'/>",
+                    "infoEmpty": "데이터 없음",
+                    "infoFiltered": "<input type='hidden' id='filtered' value='_MAX_'>",
+                    "search": " ",
+                    "searchPlaceholder": "검색어를 입력하세요.",
+                    "zeroRecords": "일치하는 데이터가 없습니다.",
+                    "loadingRecords": "로딩중...",
+                    "processing": "잠시만 기다려 주세요...",
+                    "paginate": {
+                        "next": '<a href="#" class="direction"><img src="/img/list/next.png" alt="다음페이지" style="width: 20px; padding:3px;"/></a>',
+                        "previous": '<a href="#" class="direction"><img src="/img/list/back.png" alt="이전페이지" style="width: 20px; padding:3px;"/></a>',
+                        "last": '<a href="#" class="direction"><img src="/img/list/right.png" alt="마지막페이지" style="width: 20px;"/></a>',
+                        "first": '<a href="#" class="direction"><img src="/img/list/left.png" alt="처음페이지" style="width: 20px;"/></a>',
+                    }
+
+                },
+                ajax: function(data, callback, settings) {
+                    const param= {
+                        memberId : /*[[ ${memId} ]]*/
+                    }
+                    fetch('/mypage/space/api/list', {
+                        method: 'POST',
+                        headers: {
+                            'header': document.getElementById('_csrf_header').content,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            "Content-Type": "application/json",
+                            'X-CSRF-Token': document.getElementById('_csrf').content
+                        },
+                        body: JSON.stringify(param)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                        }
+                        return response.json();
+                    })
+                    .then(json => {
+                        // 서버 응답 데이터의 구조를 확인하고 기본값을 설정합니다.
+                        const response = {
+                            draw: data.draw,
+                            recordsTotal: json.recordsTotal || 0,
+                            recordsFiltered: json.recordsFiltered || 0,
+                            data: json
+                        };
+                        callback(response);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        // 응답이 실패한 경우 빈 데이터를 반환하여 DataTables가 올바르게 처리
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: []
+                        });
+                    });
+                },
+                columns: [
+                    {
+                        orderable: false, // 정렬 X
+                        className: 'table-active dt-body-center',
+                        render: function (data, type, full, meta) {
+                            return '<input type="checkbox" name="spaceId" value=' + full.spaceId + '>';
+                        }
+                    },
+                    {
+                        target: 1, data: "type",
+                        "className": "text-center" // 카테고리명
+                    },
+                    {
+                        target: 2, data: "title",
+                        "className": "text-center" // 제목
+                    },
+                    {
+                        target: 3, data: "openYn",
+                        "className": "text-center" // 공개여부
+                    }
+                ],
+                "initComplete": function(settings, json) {
+                    var totalRecords = table.page.info().recordsTotal;
+                    $('#data_cnt').text(totalRecords);
+                },
+                pagingType: 'full_numbers' // 페이징 처음으로, 마지막으로 추가
+            });
+            // dataTable 자체 search input 없애기
+            $('.dataTables_filter').remove();
+
+            // 검색 조건 클릭 시 이벤트 (column(0) : 관심분야)
+            $('select').change(function() {
+                var val = $(this).val();
+                if ($(this).attr('id') == 'srch_rqr1') {
+                    table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+                } else if ($(this).attr('id') == 'category_list') {
+                    table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
+                }
+            });
+
+            // 검색 창 검색
+            $('#search_wrd').unbind().bind('keyup', function() {
+                var val = $(this).val();
+                table.draw();
+                table.search(val).draw();
+            });
+
+            // 클릭 이벤트 - 상세조회 화면 이동
+            $("#spaceTable").on('click', 'tbody td', function () {
+                // var spaceId = $("#dataTable").DataTable().row($(this)).data().memberSpaceId;
+                // var url = window.location.href
+                // url = url.substring(0, url.indexOf('mypage'));
+                // var link = url + 'space/' + spaceId;
+                //
+                // location.href=link;
+            });
+
+            // 전체 선택/해제
+            $('#checkAll').click(function() {
+                if($("#checkAll").is(":checked")) $("input[name=spaceId]").prop("checked", true);
+                else $("input[name=spaceId]").prop("checked", false);
+            });
+
+            // 삭제
+            $('#btn_delete').click(function(){
+                if($('#spaceTable input:checkbox:checked').length > 0){
+                    if (confirm("선택된 스페이스를 삭제하시겠습니까?")) {
+                        var checkArr = []; // 배열 초기화
+                        $("#spaceTable input[name=spaceId]:checked").each(function(i){
+                            checkArr.push($(this).val());
+                        });
+
+                        if (checkArr.length > 0) {
+                            fetch(`/mypage/space/api/delete/${checkArr}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'header': document.getElementById('_csrf_header').content,
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    "Content-Type": "application/json",
+                                    'X-CSRF-Token': document.getElementById('_csrf').content
+                                },
+                            }).then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Request failed...');
+                                }
+                                history.go(0);
+                                alert('선택한 스페이스가 삭제되었습니다.');
+                            }).catch(error => {
+                                alert('오류가 발생하였습니다.');
+                            });
+                        }
+                    }
+                } else {
+                    alert('삭제할 스페이스를 선택하세요.');
+                }
+            });
+            // 일괄수정 값 전달
+            $("#btn_update").click(function(){
+                if($('#spaceTable input:checkbox:checked').length > 0){
+                    var checkArr = new Array();
+                    $("#spaceTable input[name=spaceId]:checked").each(function(i){
+                        checkArr.push($(this).val());
+                    });
+                    popOpen(checkArr);
+                } else {
+                    alert('수정할 스페이스를 선택하세요.');
+                }
+            });
+
+            // 일괄수정 팝업 열기
+            function popOpen(checkArr) {
+                var modalPop = $('.popup');
+                $(modalPop).show();
+
+                // 카테고리 리스트
+                category_list('category_list2');
+            }
+        })
+
+        // 일괄수정 팝업 닫기
+        function popClose() {
+            var modalPop = $('.popup');
+            $(modalPop).hide();
         }
 
-        // 스페이스 리스트 조회
-        function list() {
-            fetch('/mypage/space/api/list', {
+        // 팝업 불투명
+        function showPopBlur(chk){
+            if(chk == false)
+                $('.content').css({"opacity" : "1","pointer-events":"auto"});
+            else
+                $('.content').css({"opacity" : "0.3","pointer-events":"none"});
+        }
+
+        // 일괄 수정
+        function fn_update() {
+            debugger;
+
+            var checkArr = new Array();
+            $("#spaceTable input[name=spaceId]:checked").each(function(i){
+                checkArr.push($(this).val());
+            });
+
+            const params = {
+                categoryId : $("#category_list2 option:selected").val(),
+                openYn : $("#select_open option:selected").val()
+            }
+
+
+            // 일괄 수정
+            fetch(`/mypage/space/api/listUpdate/${checkArr}`, {
                 method: 'POST',
                 headers: {
                     'header': document.getElementById('_csrf_header').content,
@@ -123,37 +406,20 @@
             }).then(response => {
                 if (!response.ok) {
                     throw new Error('Request failed...');
-                } else {
-                    return response.json();
                 }
-            }).then(json => {
-
-                let html = '';
-
-                json.forEach((obj, idx) => {
-                    html += `
-                        <div>
-                            <div style="float: left; width: 5%; margin-top: 10px; margin-left: 20px;">
-                                <input type="checkbox" name="titleCheck" value="${obj.spaceId}" style="width: 24px; height: 24px;">
-                            </div>
-
-                            <div style="float: left; width: 62%; margin-top: 5px;">
-                                <div class="spaceTitle" style="width: 400px; font-size: 23px; letter-spacing: 4px; text-align: left; margin-left: 20px; float: left; border: none;">
-                                    ${obj.title}
-                                </div>
-                            </div>
-
-                            <br> <Br>
-                            <hr style="color: #094B80;">
-                        </div>
-                    `;
-                });
-                document.getElementById('list').innerHTML = html;
-            })
+                history.go(0);
+                alert('선택한 스페이스가 일괄 수정되었습니다.');
+            }).catch(error => {
+                alert('오류가 발생하였습니다.');
+            });
         }
 
         // 카테고리 리스트 조회
-        function category_list() {
+        const params= {
+            memberId : /*[[ ${memId} ]]*/
+        }
+
+        function category_list(select_id) {
             fetch('/mypage/category/api/list', {
                 method: 'POST',
                 headers: {
@@ -170,18 +436,29 @@
                     return response.json();
                 }
             }).then(json => {
-                let html = '<option value="0" selected>카테고리</option>';
+                let html = '<option value="" selected>카테고리</option>';
 
-                json.forEach((obj, idx) => {
-                   html += `
+                if(select_id === 'category_list2') {
+                    json.forEach((obj, idx) => {
+                        html += `
                    <option value="${obj.categoryId}">${obj.categoryType}</option>
                     `;
-                });
-                document.getElementById('category_list').innerHTML = html;
+                    });
+                } else {
+                    json.forEach((obj, idx) => {
+                        html += `
+                   <option value="${obj.categoryType}">${obj.categoryType}</option>
+                    `;
+                    });
+                }
+                document.getElementById(select_id).innerHTML = html;
             }).catch(error => {
                 alert('오류가 발생하였습니다.');
             })
         }
+
+
+
     </script>
 </th:block>
 </html>

@@ -167,11 +167,10 @@ public class MemberService implements UserDetailsService {
 		return lists.stream().map(MemberExternalDto::new).collect(Collectors.toList());
     }
 
+	// 외부 스페이스 목록 조회
     public List<MemberExternalDto> externalSpaceList() {
-//		List<Member> lists = memberRepository.findExternalSpaceList();
 		List<MemberExternalDto> lists = memberRepository.findExternalSpaceList();
 		log.info(">>>> lists" + lists);
 		return lists;
-//		return lists.stream().map(MemberExternalDto::new).collect(Collectors.toList());
     }
 }

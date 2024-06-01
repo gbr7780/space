@@ -2,6 +2,8 @@ package com.space.space.entity;
 
 import com.space.member.entity.Member;
 import com.space.mypage.category.entity.Category;
+import com.space.mypage.space.dto.SpaceAllUpdateDto;
+import com.space.mypage.space.dto.SpaceListDto;
 import com.space.space.dto.SpaceWriteDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,5 +53,11 @@ public class Space {
 		content.setOpenYn(spaceWriteDto.getOpenYn());
 		content.setTitle(spaceWriteDto.getTitle());
 		return content;
+	}
+	// dto to entity
+	// 일괄 수정용
+	public Space(SpaceAllUpdateDto dto) {
+		this.id = dto.getSpaceId();
+		this.openYn = dto.getOpenYn();
 	}
 }

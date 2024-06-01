@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 /**
- * description    :
+ * description    : 스페이스 일괄 수정 DTO
  * packageName    : com.space.mypage.space.dto
  * fileName        : SpaceListDto
  * author         : kimminsol
@@ -22,31 +24,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpaceListDto {
+public class SpaceAllUpdateDto {
     private Long spaceId;       // 스페이스 id
-
-    private String title;       // 스페이스 제목
 
     private String openYn;      // 스페이스 공개여부
 
-    private Long memberId;      // 사용자 id
-
-    private String type;    // 카테고리명
-
-    // entity to dto
-    public SpaceListDto(Space space) {
-        this.spaceId = space.getId();
-        this.title = space.getTitle();
-        this.openYn = space.getOpenYn();
-        this.memberId = space.getMember().getId();
-    }
-
-    public SpaceListDto(Long spaceId, String title, String openYn, String categoryType, Long memberId) {
-        this.spaceId = spaceId;
-        this.title = title;
-        this.openYn = openYn;
-        this.type = categoryType;
-        this.memberId = memberId;
-    }
-
+    private Long categoryId;    // 카테고리 id
 }

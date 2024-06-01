@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.space.exception.CustomException;
+import com.space.exception.ErrorCode;
+import com.space.mypage.space.dto.SpaceAllUpdateDto;
 import com.space.mypage.space.dto.SpaceListDto;
 import com.space.space.dto.SpaceResponseDto;
 import com.space.space.entity.Space;
@@ -35,11 +38,17 @@ public class SpaceService {
 	private MemberRepository memberRepository;
 
 	// 스페이스 리스트 조회
+//	public List<SpaceListDto> list(Long memberId) {
+//		List<Space> lists = spaceRepository.findByMemberId(memberId);
+//		return lists.stream().map(SpaceListDto::new).collect(Collectors.toList());
+//	}
+
 	public List<SpaceListDto> list(Long memberId) {
-		List<Space> lists = spaceRepository.findByMemberId(memberId);
-		return lists.stream().map(SpaceListDto::new).collect(Collectors.toList());
+		List<SpaceListDto> lists = spaceRepository.findSpaceList(memberId);
+		return lists;
+//		return lists.stream().map(SpaceListDto::new).collect(Collectors.toList());
 	}
-	
+
 	// 마이페이지 작성하기 
 	public Space saveSpace(@AuthenticationPrincipal PrincipalDetails principalDetails, Space space, String Category_id) {
 		Long member_id = principalDetails.getMember().getId();
@@ -81,4 +90,24 @@ public class SpaceService {
 		return spaceRepository.findSpcaeAll(memberId);
 	}
 
+	// 스페이스 삭제
+	@Transactional
+	public void delete(final Long spaceId) {
+		spaceRepository.deleteById(spaceId);
+	}
+
+	// 스페이스 일괄 수정
+	@Transactional
+	public void update(SpaceAllUpdateDto dto) {
+		Space space = new Space(dto);
+		// 카테고리 id
+		Category category = categoryRepository.findCategoryById(dto.getCategoryId());
+		space.setCategory(category);
+		Space temp = spaceRepository.findSpaceById(dto.getSpaceId());
+
+		space.setMember(temp.getMember());
+		space.setTitle(temp.getTitle());
+		space.setContent(temp.getContent());
+		spaceRepository.save(space);
+	}
 }
