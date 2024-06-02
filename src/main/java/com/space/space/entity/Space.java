@@ -4,6 +4,7 @@ import com.space.member.entity.Member;
 import com.space.mypage.category.entity.Category;
 import com.space.mypage.space.dto.SpaceAllUpdateDto;
 import com.space.mypage.space.dto.SpaceListDto;
+import com.space.mypage.space.dto.SpaceUpdateDto;
 import com.space.space.dto.SpaceWriteDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,6 +59,14 @@ public class Space {
 	// 일괄 수정용
 	public Space(SpaceAllUpdateDto dto) {
 		this.id = dto.getSpaceId();
+		this.openYn = dto.getOpenYn();
+	}
+
+	// 수정용
+	public Space(SpaceUpdateDto dto){
+		this.id  = dto.getSpaceId();
+		this.title = dto.getTitle();
+		this.content = dto.getContent();
 		this.openYn = dto.getOpenYn();
 	}
 }

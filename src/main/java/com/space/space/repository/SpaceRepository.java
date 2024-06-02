@@ -16,8 +16,7 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
     List<Space> findByMemberId(Long memberId);
 
     // 스페이스 리스트 조회
-    @Query("select new com.space.mypage.space.dto.SpaceListDto(s.id, s.title, s.openYn, c.type, s.member.id) FROM Space s JOIN s.category c ON s.category.id = c.id WHERE s.member.id =:memberId")
-//    @Query("select s.id, s.title, s.openYn, c.type from Space s JOIN s.category c WHERE s.member.id =:memberId")
+    @Query("select new com.space.mypage.space.dto.SpaceListDto(s.id, s.title, s.openYn, c.type, s.member.id) FROM Space s JOIN s.category c ON s.category.id = c.id WHERE s.member.id =:memberId order by s.id desc")
     List<SpaceListDto> findSpaceList(Long memberId);
 
     // 스페이스 메인 출력
