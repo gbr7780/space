@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
 
 <meta charset="utf-8">
@@ -41,6 +41,8 @@
 	href="https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap"
 	rel="stylesheet">
 
+	<link rel="stylesheet"
+		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <!-- Custom styles for this template -->
 <link href="/space/css/resume.min.css" rel="stylesheet">
@@ -79,16 +81,6 @@ body::-webkit-scrollbar {
 	display: none; /* Chrome, Safari, Opera*/
 }
 
-.image {
-	border-radius: 264px;
-	background: #023476;
-	margin: 751.5px 0 1872px 0;
-	display: flex;
-	padding: 16px 14px 14px 15px;
-	width: 72px;
-	height: 72px;
-	box-sizing: border-box;
-}
 table {
 	width: 100%;
 	border: 1px solid #444444;
@@ -116,11 +108,46 @@ blockquote {
 blockquote p {
 	margin-bottom: 0px;
 }
+
 img {
 	width: 100%;
 }
+
+
 .media {
 	display: block;
+}
+.text-center {
+
+	width: 100%;
+	height: 100%;
+	display: none;
+	bottom: 0;
+	right: 0;
+	background: rgba(0,0,0,0.3);
+	z-index: 100;
+	justify-content: center;
+	align-items: center;
+	margin: -30px 0 0 -30px;
+	position: fixed;
+}
+
+.spinner-border {
+	display: block;
+	position: fixed;
+	top : calc(50% - (250px /2));
+	right: calc(50% - (250px /2));
+	width: 10rem;
+	height: 10rem;
+
+	border: .25em solid #023476;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: spinner-border .75s linear infinite;
+}
+
+.category-top-margin {
+	margin-top : 40px;
 }
 
 </style>
@@ -129,17 +156,29 @@ img {
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
 	crossorigin="anonymous"></script>
+
+	<!-- JS, Popper.js, and jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+	<!--pdf-->
+	<script src="/js/html2canvas.js"></script>
+	<script src="/js/jspdf.min.js"></script>
+	<!--로딩바
+	<script src="/js/loading.js"></script> -->
 </head>
 
 <body id="page-top">
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary " id="sideNav" style="background: rgba(0,0,0,0.8)">
 		<a class="navbar-brand js-scroll-trigger" href="#page-top" style="">
-			<span class="d-block d-lg-none">Start Bootstrap</span> <span class="d-none d-lg-block">
+			<span class="d-block d-lg-none">space</span> <span class="d-none d-lg-block">
+
+
 			<img
 				class="img-fluid img-profile rounded-circle mx-auto mb-2"
 				th:src="${member.image} != null ? ${member.image} : @{/img/스페이스.png}"
 				alt="" style="width: 300px; height: 300px;">
+
 		</span>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -181,7 +220,7 @@ img {
 	<div class="container-fluid p-0"
 		style="margin-left: 100px; width: 1500px;">
 		
-		<div th:if="${#strings.equals(spaceId, memMember.spaceId)} or ${#strings.equals(member.AllPublicYn, 'Y')}">
+		<div th:if="${#strings.equals(spaceId, memMember.spaceId)} or ${#strings.equals(member.AllPublicYn, 'Y')}" >
 			<!-- 내용을 확인하려면 계정의 ID와 로그인한 ID가 동일하거나 스페이스 전체 공개 -->
 			<!-- 상단 사이드바 -->
 			<div class="floBanPc1 hidden-md hidden-sm hidden-xs" th:if="${#strings.equals(spaceId, memMember.spaceId)}">
@@ -204,14 +243,21 @@ img {
 				</button>
 				<ul class="dropdown-menu">
 					<li><a class="dropdown-item" data-toggle="modal" href="#myModal">링크 공유</a></li>
-					<li><a class="dropdown-item" href="/mypage/category">PDF 내보내기</a></li>
+					<li><a class="dropdown-item"  id="savePdf">PDF 내보내기</a></li>
 
 				</ul>
 			</div>
+			<!-- 로딩바 -->
+			<div class="text-center loading">
+				<div class="spinner-border" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+			</div>
 
+			<div id="pdfDiv">
 			<section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
 				<div class="my-auto" >
-					<h2 class="mb-5 space-title" th:text="${categorys1}">보유기술</h2>
+					<h2 class="mb-5 space-title category-top-margin" th:text="${categorys1}">프로필</h2>
 
 					<div th:each="vo : ${spaceLists}" th:if="${vo.type} == ${categorys1}">
 						<p th:text="${vo.title}" style="font-size:30px; color:black;">-</p>
@@ -248,13 +294,6 @@ img {
 						<br><br><br>
 					</div>
 
-					<!--
-					<div th:each="vo3 : ${conList3}">
-					<p th:text="${vo3}" style="font-size:30px; color:black;">-</p>
-					<hr>
-					</div>
-					-->
-
 				</div>
 			</section>
 
@@ -282,6 +321,11 @@ img {
 					</div>
 				</div>
 			</section>
+
+
+
+
+			</div>
 		</div>
 		<div
 			th:if="!(${#strings.equals(spaceId, memMember.spaceId)}) and ${#strings.equals(member.AllPublicYn, 'N')}">
@@ -291,6 +335,9 @@ img {
 				공개되지 않은 스페이스입니다.</p>
 		</div>
 	</div>
+
+
+
 
 	<!-- 모달 -->
 	<div class="modal fade" id="myModal" tabindex="-1"
@@ -315,7 +362,50 @@ img {
 
 	</div>
 
-	<script type="text/javascript">
+	<script th:inline="javascript">
+
+
+
+		$(document).ready(function() {
+
+			// pdf 내보내기
+			$('#savePdf').click(function() { // pdf저장 button id
+				var memberName = /*[[ ${member.name} ]]*/
+				$('.text-center').css("display","block");
+				html2canvas($('#pdfDiv')[0]).then(function(canvas) { //저장 영역 div id
+
+					// 캔버스를 이미지로 변환
+					var imgData = canvas.toDataURL('image/png');
+
+					var imgWidth = 190; // 이미지 가로 길이(mm) / A4 기준 210mm
+					var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+					var imgHeight = canvas.height * imgWidth / canvas.width;
+					var heightLeft = imgHeight;
+					var margin = 10; // 출력 페이지 여백설정
+					var doc = new jsPDF('p', 'mm');
+					var position = 0;
+
+					// 첫 페이지 출력
+					doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+					heightLeft -= pageHeight;
+
+					// 한 페이지 이상일 경우 루프 돌면서 출력
+					while (heightLeft >= 20) {
+						position = heightLeft - imgHeight;
+						doc.addPage();
+						doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+						heightLeft -= pageHeight;
+					}
+
+					// 파일 저장
+					doc.save(memberName + '_포트폴리오.pdf');
+					$('.text-center').css("display","none");
+				});
+			});
+		})
+
+
+
 		function copy_to_clipboard() {
 			console.log("Dd")
 			var copyText = document.getElementById('mySpace');
@@ -325,6 +415,9 @@ img {
 			alert('복사되었습니다, 감사합니다.');
 			window.location.reload(); // 페이지 새로고침
 		}
+
+
+
 	</script>
 
 	<!-- Bootstrap core JavaScript -->
@@ -336,6 +429,8 @@ img {
 
 	<!-- Custom scripts for this template -->
 	<script src="/space/js/resume.min.js"></script>
+
+
 
 </body>
 </html>

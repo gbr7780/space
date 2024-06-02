@@ -123,47 +123,6 @@ public class MainController {
         Long categorysIds4 = categorysIds.get(3);
         Long categorysIds5 = categorysIds.get(4);
 
-        // 내용 출력
-        List<Space> listscon = spaceRepository.findAll();
-        List<String> titleList = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-
-        List<String> conList1 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-        List<String> conList2 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-        List<String> conList3 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-        List<String> conList4 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-        List<String> conList5 = new ArrayList<>(); // 로그인한 사용자의 카테고리 이름을 저장할 리스트 선언
-
-        for (int i = 0; i < listscon.size(); i++) {
-            if (listscon.get(i).getMember().getId().equals(principalDetails.getMember().getId())) {
-                if(listscon.get(i).getCategory().getId().equals(categorysIds1)) {
-                    String conttitle1 = listscon.get(i).getTitle();
-                    conList1.add(conttitle1); // 리스트에 카테고리 이름 저장
-                } else if(listscon.get(i).getCategory().getId().equals(categorysIds2)) {
-                    String conttitle2 = listscon.get(i).getTitle();
-                    conList2.add(conttitle2); // 리스트에 카테고리 이름 저장
-                } else if(listscon.get(i).getCategory().getId().equals(categorysIds3)) {
-                    String conttitle3 = listscon.get(i).getTitle();
-                    conList3.add(conttitle3); // 리스트에 카테고리 이름 저장
-                } else if(listscon.get(i).getCategory().getId().equals(categorysIds4)) {
-                    String conttitle4 = listscon.get(i).getTitle();
-                    conList4.add(conttitle4); // 리스트에 카테고리 이름 저장
-                } else if(listscon.get(i).getCategory().getId().equals(categorysIds5)) {
-                    String conttitle5 = listscon.get(i).getTitle();
-                    conList5.add(conttitle5); // 리스트에 카테고리 이름 저장
-                }
-                String conttitle = listscon.get(i).getTitle();
-                titleList.add(conttitle); // 리스트에 카테고리 이름 저장
-            }
-        }
-
-
-        model.addAttribute("titleList", titleList);
-        model.addAttribute("conList1", conList1);
-        model.addAttribute("conList2", conList2);
-        model.addAttribute("conList3", conList3);
-        model.addAttribute("conList4", conList4);
-        model.addAttribute("conList5", conList5);
-
         return "space/spaceMain";
     }
 }
