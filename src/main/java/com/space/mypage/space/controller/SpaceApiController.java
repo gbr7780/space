@@ -1,12 +1,22 @@
 package com.space.mypage.space.controller;
 
+import com.space.config.auth.PrincipalDetails;
+import com.space.member.entity.Member;
+import com.space.mypage.category.entity.Category;
+import com.space.mypage.constant.PrivateYn;
 import com.space.mypage.space.dto.SpaceAllUpdateDto;
+import com.space.mypage.space.dto.SpaceUpdateDto;
 import com.space.mypage.space.service.SpaceService;
 import com.space.mypage.space.dto.SpaceListDto;
+import com.space.space.dto.SpaceWriteDto;
+import com.space.space.entity.Space;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +59,12 @@ public class SpaceApiController {
     public void listUpdate(@PathVariable final Long[] checkArr, @RequestBody final SpaceAllUpdateDto dto) {
         for(int i=0; i<checkArr.length; i++){
             dto.setSpaceId(checkArr[i]);
-            spaceService.update(dto);
+            spaceService.allUpdate(dto);
         }
+    }
+    // 스페이스 수정
+    @PostMapping("/update")
+    public void update(@RequestBody final SpaceUpdateDto dto) {
+        spaceService.update(dto);
     }
 }

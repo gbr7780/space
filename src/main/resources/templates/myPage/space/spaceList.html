@@ -292,14 +292,14 @@
                 table.search(val).draw();
             });
 
-            // 클릭 이벤트 - 상세조회 화면 이동
-            $("#spaceTable").on('click', 'tbody td', function () {
-                // var spaceId = $("#dataTable").DataTable().row($(this)).data().memberSpaceId;
-                // var url = window.location.href
-                // url = url.substring(0, url.indexOf('mypage'));
-                // var link = url + 'space/' + spaceId;
-                //
-                // location.href=link;
+            // 클릭 이벤트 - 수정 화면 이동
+            $("#spaceTable").on('click', 'tbody tr td:not(.table-active)', function () {
+                var spaceId = $("#spaceTable").DataTable().row($(this)).data().spaceId;
+
+                var url = window.location.href
+                var link = url + '/update/' + spaceId;
+
+                location.href=link;
             });
 
             // 전체 선택/해제
@@ -380,7 +380,11 @@
 
         // 일괄 수정
         function fn_update() {
-            debugger;
+
+            if($("#category_list2 option:selected").val() === '' || $("#select_open option:selected").val() === ''){
+                alert('카테고리 또는 공개여부를 선택해주세요.');
+                return false;
+            }
 
             var checkArr = new Array();
             $("#spaceTable input[name=spaceId]:checked").each(function(i){
@@ -391,7 +395,6 @@
                 categoryId : $("#category_list2 option:selected").val(),
                 openYn : $("#select_open option:selected").val()
             }
-
 
             // 일괄 수정
             fetch(`/mypage/space/api/listUpdate/${checkArr}`, {
@@ -456,9 +459,6 @@
                 alert('오류가 발생하였습니다.');
             })
         }
-
-
-
     </script>
 </th:block>
 </html>

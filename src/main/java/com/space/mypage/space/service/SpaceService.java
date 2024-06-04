@@ -10,6 +10,7 @@ import com.space.exception.CustomException;
 import com.space.exception.ErrorCode;
 import com.space.mypage.space.dto.SpaceAllUpdateDto;
 import com.space.mypage.space.dto.SpaceListDto;
+import com.space.mypage.space.dto.SpaceUpdateDto;
 import com.space.space.dto.SpaceResponseDto;
 import com.space.space.entity.Space;
 import com.space.space.repository.SpaceRepository;
@@ -98,7 +99,7 @@ public class SpaceService {
 
 	// 스페이스 일괄 수정
 	@Transactional
-	public void update(SpaceAllUpdateDto dto) {
+	public void allUpdate(SpaceAllUpdateDto dto) {
 		Space space = new Space(dto);
 		// 카테고리 id
 		Category category = categoryRepository.findCategoryById(dto.getCategoryId());
@@ -108,6 +109,19 @@ public class SpaceService {
 		space.setMember(temp.getMember());
 		space.setTitle(temp.getTitle());
 		space.setContent(temp.getContent());
+		spaceRepository.save(space);
+	}
+
+	// 스페이스 수정
+	public void update(SpaceUpdateDto dto) {
+		Space space = new Space(dto);
+		// 카테고리 id
+		Category category = categoryRepository.findCategoryById(dto.getCategoryId());
+		space.setCategory(category);
+
+		// 사용자 id
+		Member member = memberRepository.findMemberById(dto.getMemberId());
+		space.setMember(member);
 		spaceRepository.save(space);
 	}
 }
