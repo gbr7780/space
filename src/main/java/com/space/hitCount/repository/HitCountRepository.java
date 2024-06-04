@@ -9,4 +9,8 @@ import com.space.hitCount.entity.HitCount;
 public interface HitCountRepository extends JpaRepository<HitCount,Long>{
 	
 	List<HitCount> findAllByOrderByIdDesc();
+
+
+	Long countBySpaceId(String spaceId);
+
 }

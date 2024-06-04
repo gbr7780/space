@@ -47,4 +47,15 @@ public class HitCountService {
 			List<HitCount> countList = hitCountRepository.findAllByOrderByIdDesc();
 			return countList;
 		}
+
+	/**
+	 * 스페이스 메인 페이지 - 로그인한 사용자의 조회수 가져오기 위한 로직
+	 * @param memberId
+	 * @return
+	 */
+		public Long getUserHit(String memberId){
+			return hitCountRepository.countBySpaceId(memberId);
+		}
+
+
 }

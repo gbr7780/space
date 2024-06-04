@@ -11,7 +11,7 @@
   width: $spinner-width;
   height: $spinner-height;
   vertical-align: text-bottom;
-  border: $spinner-border-width solid currentColor;
+  border: $spinner-border-width solid #3498db;
   border-right-color: transparent;
   // stylelint-disable-next-line property-blacklist
   border-radius: 50%;

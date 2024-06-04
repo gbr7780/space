@@ -242,7 +242,7 @@ img {
 					<img src="/img/rightBottomLogo.png" style="width: 80px; height: 80px">
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="dropdown-item" data-toggle="modal" href="#myModal">링크 공유</a></li>
+					<li><a class="dropdown-item" onclick="kakaoShare()">카카오톡 공유하기</a></li>
 					<li><a class="dropdown-item"  id="savePdf">PDF 내보내기</a></li>
 
 				</ul>
@@ -336,41 +336,22 @@ img {
 		</div>
 	</div>
 
-
-
-
-	<!-- 모달 -->
-	<div class="modal fade" id="myModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="display: flex; width: 500px;">
-			<div class="modal-content">
-				<div class="modal-body"
-					style="height: 60px; width: 500px; text-align: center; color: black; margin-top: 20px;">
-					<div style="font-weight: bold; font-size: 16px;">공유 URL을
-						복사하세요!</div>
-					<input id="mySpace" th:value="'http://localhost/space/' + ${spaceId}"
-						readonly
-						style="width: 100%; border: none; outline: none; padding: 0px; text-align: center; margin-top: 10px;">
-				</div>
-				<div class="modal-footer" style="border: none">
-					<button type="button" class="btn btn-cancel"
-						onclick="copy_to_clipboard()"
-						style="background-color: #BFDDF9; border-color: #094B80;">복사</button>
-				</div>
-			</div>
-		</div>
-
-	</div>
-
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<script th:inline="javascript">
 
+		var memberImage = /*[[ ${member.image} ]]*/
+		var memberName = /*[[ ${member.name} ]]*/
+		var memberSpaceId = /*[[ ${member.spaceId} ]]*/
+		var hitCount = /*[[ ${hitCount} ]]*/
 
 
 		$(document).ready(function() {
 
-			// pdf 내보내기
+			/**
+			 * PDF 내보내기
+			 */
 			$('#savePdf').click(function() { // pdf저장 button id
-				var memberName = /*[[ ${member.name} ]]*/
+
 				$('.text-center').css("display","block");
 				html2canvas($('#pdfDiv')[0]).then(function(canvas) { //저장 영역 div id
 
@@ -402,18 +383,51 @@ img {
 					$('.text-center').css("display","none");
 				});
 			});
+
+
 		})
 
+		/**
+		 * 카카오톡 공유하기
+		 */
+		function kakaoShare() {
 
 
-		function copy_to_clipboard() {
-			console.log("Dd")
-			var copyText = document.getElementById('mySpace');
-			copyText.select();
-			copyText.setSelectionRange(0, 99999);
-			document.execCommand("Copy");
-			alert('복사되었습니다, 감사합니다.');
-			window.location.reload(); // 페이지 새로고침
+			// init 체크
+			if (!Kakao.isInitialized()) {
+				Kakao.init('8d88fe30f1babaf45150d93fec381f08');
+			}
+
+			Kakao.Link.sendDefault({
+				objectType: 'feed',
+				content: {
+					title: memberName+'의 포트폴리오',
+					description: memberName+'의 포트폴리오 입니다. 확인해주세요.',
+					imageUrl: memberImage,
+					link: {
+						mobileWebUrl: 'http://localhost:8080/space/'+memberSpaceId,
+						webUrl: 'http://localhost:8080/space/'+memberSpaceId,
+					},
+				},
+				itemContent: {
+					profileText: memberName,
+					profileImageUrl: memberImage,
+				},
+				social: {
+					likeCount: hitCount
+				},
+				buttons: [
+					{
+						title: '자세히 보기',
+						link: {
+							mobileWebUrl: 'http://localhost:8080/space/'+memberSpaceId,
+							webUrl: 'http://localhost:8080/space/'+memberSpaceId,
+						},
+					},
+				],
+				// 카카오톡 미설치 시 카카오톡 설치 경로이동
+				installTalk: true,
+			})
 		}
 
 

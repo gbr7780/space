@@ -66,6 +66,9 @@ public class MainController {
     @GetMapping("/space/{spaceId}")
     public String spaceMain(@PathVariable("spaceId") String spaceId, Model model,
                             @AuthenticationPrincipal PrincipalDetails principalDetails, HitCount hitcount) {
+
+
+
         model.addAttribute("spaceId", spaceId);
         log.info(">>>>>>>>>>>> spaceId : " + spaceId);
 
@@ -76,6 +79,9 @@ public class MainController {
 
         List<SpaceResponseDto> spaceLists = spaceService.findSpcaeAll(memid);
         model.addAttribute("spaceLists", spaceLists);
+
+
+
 
         // 스페이스 계정에 대한 정보
         List<Member> list = memberRepository.findAll();
@@ -97,6 +103,10 @@ public class MainController {
         // 조회수 증가
         countService.hitCountSave(spaceId, "날짜", hitcount);
         log.info("조회수 증가");
+
+
+
+
 
         // 카테고리 출력
         List<Category> lists = categoryRepository.findAll();
@@ -122,6 +132,10 @@ public class MainController {
         Long categorysIds3 = categorysIds.get(2);
         Long categorysIds4 = categorysIds.get(3);
         Long categorysIds5 = categorysIds.get(4);
+
+        // 로그인한 사용자 조회수
+        Long hitCount = countService.getUserHit(memMember.getSpaceId());
+        model.addAttribute("hitCount",hitCount);
 
         return "space/spaceMain";
     }
