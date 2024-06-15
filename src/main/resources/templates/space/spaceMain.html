@@ -110,7 +110,8 @@ blockquote p {
 }
 
 img {
-	width: 100%;
+	width: 80%;
+	height: 50%;
 }
 
 
@@ -163,6 +164,7 @@ img {
 	<!--pdf-->
 	<script src="/js/html2canvas.js"></script>
 	<script src="/js/jspdf.min.js"></script>
+	<script src="/js/html2pdf.bundle.js"></script>
 	<!--로딩바
 	<script src="/js/loading.js"></script> -->
 </head>
@@ -255,7 +257,7 @@ img {
 			</div>
 
 			<div id="pdfDiv">
-			<section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
+			<section class="resume-section p-3 p-lg-5 d-flex d-column pdf_page" id="about">
 				<div class="my-auto" >
 					<h2 class="mb-5 space-title category-top-margin" th:text="${categorys1}">프로필</h2>
 
@@ -267,8 +269,7 @@ img {
 				</div>
 			</section>
 
-			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
-				id="experience">
+			<section class="resume-section p-3 p-lg-5 d-flex flex-column pdf_page" id="experience">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys2}">프로젝트</h2>
 
@@ -282,7 +283,7 @@ img {
 
 			</section>
 
-			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
+			<section class="resume-section p-3 p-lg-5 d-flex flex-column pdf_page"
 				id="education">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys3}">대외활동</h2>
@@ -297,7 +298,7 @@ img {
 				</div>
 			</section>
 
-			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
+			<section class="resume-section p-3 p-lg-5 d-flex flex-column pdf_page"
 				id="skills">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys4}">수상자격 / 자격증</h2>
@@ -310,7 +311,7 @@ img {
 				</div>
 			</section>
 
-			<section class="resume-section p-3 p-lg-5 d-flex flex-column"
+			<section class="resume-section p-3 p-lg-5 d-flex flex-column pdf_page"
 				id="interests">
 				<div class="my-auto">
 					<h2 class="mb-5 space-title" th:text="${categorys5}">보유기술</h2>
@@ -346,35 +347,44 @@ img {
 
 
 		$(document).ready(function() {
-
 			/**
 			 * PDF 내보내기
 			 */
+
 			$('#savePdf').click(function() { // pdf저장 button id
 
 				$('.text-center').css("display","block");
+
+				// setTImeout을 하는 이유는 html2canvas를 불러오는게 너무 빨라서 앞의 js가 먹혀도 반영되지 않은 것처럼 보임
+				setTimeout(function() {
+					createPdf();
+				}, 5000);
+
+			});
+
+			function createPdf() { //이미지를 pdf로 만들기
 				html2canvas($('#pdfDiv')[0]).then(function(canvas) { //저장 영역 div id
 
 					// 캔버스를 이미지로 변환
-					var imgData = canvas.toDataURL('image/png');
+					var imgData = canvas.toDataURL('image/jpeg');
 
-					var imgWidth = 190; // 이미지 가로 길이(mm) / A4 기준 210mm
+					var imgWidth = 210; // 이미지 가로 길이(mm) / A4 기준 210mm
 					var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
 					var imgHeight = canvas.height * imgWidth / canvas.width;
 					var heightLeft = imgHeight;
-					var margin = 10; // 출력 페이지 여백설정
+					var margin = 20; // 출력 페이지 여백설정
 					var doc = new jsPDF('p', 'mm');
 					var position = 0;
 
 					// 첫 페이지 출력
-					doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+					doc.addImage(imgData, 'jpeg', margin, position, imgWidth, imgHeight);
 					heightLeft -= pageHeight;
 
 					// 한 페이지 이상일 경우 루프 돌면서 출력
 					while (heightLeft >= 20) {
 						position = heightLeft - imgHeight;
 						doc.addPage();
-						doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+						doc.addImage(imgData, 'jpeg', margin, position, imgWidth, imgHeight);
 						heightLeft -= pageHeight;
 					}
 
@@ -382,8 +392,7 @@ img {
 					doc.save(memberName + '_포트폴리오.pdf');
 					$('.text-center').css("display","none");
 				});
-			});
-
+			}
 
 		})
 
