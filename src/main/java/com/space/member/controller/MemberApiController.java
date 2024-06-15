@@ -51,8 +51,6 @@ public class MemberApiController {
         return memberService.getMemberSido(memberSgg);
     }
 
-
-
     @PostMapping("/addLoginInfo")
     public void addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,@RequestBody OauthAddInfoDto params) {
         memberService.addInfo(principalDetails, params);

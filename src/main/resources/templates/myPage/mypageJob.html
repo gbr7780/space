@@ -2,13 +2,181 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{/layouts/mypageLayout}">
+<th:block layout:fragment="css">
+	<style>
+		.job_header{
+			width:1470px;
+			height:119px;
+		}
+		.inner{
+			float:left;
+			margin-top:44px;
+		}
+		.job_div {
+			border: 1px solid black; /* 테두리 두께와 색상 */
+			padding: 8px 7px 0px 8px; /* 내용물과 테두리 사이의 여백 */
+			margin: 3px 7px 10px 5px;
+			height: auto;
+			width: 370px;
+		}
+	</style>
+</th:block>
 
 <th:block layout:fragment="content">
 
-			<h2 style="font-weight: bold; margin-left: 200px;">[&nbsp;&nbsp;&nbsp;취업 관리&nbsp;&nbsp;&nbsp;]</h2>
-			<div
-				style="border: 1px solid #023476; background-color: white; float: center; height: 470px; width: 800px; margin-right: 15px; margin-left: 200px; margin-top: 30px; text-align: center;">
+	<div class="job_header">
+		<img src="/img/calendar.png" style="width: 75px; height: 75px; float: left; margin-top: 26px; margin-left: 45px;">
+		<h2 class="inner" style="font-weight: bold; margin-left: 110px;">[&nbsp;&nbsp;&nbsp;채용 공고&nbsp;&nbsp;&nbsp;]</h2>
 
-			</div>
+		<!-- 취업 희망 지역 -->
+		<select class="form-select inner" id="sido" aria-label="Default select example" style="padding-top:5px; width:195px; height:50px; margin-left:350px;">
+			<option value="">특별시∙도</option>
+		</select>
+
+		<select class="form-select inner" id="sgg" aria-label="Default select example" style="padding-top:5px; width: 195px;height: 50px; margin-left:20px;">
+			<option value="">시∙군∙구</option>
+		</select>
+
+		<!-- 관심 분야 -->
+		<select class="form-select border-1 inner" id="srch_rqr1" style="height: 50px; width: 195px; margin-left: 20px;">
+			<option selected value="">관심분야</option>
+			<option th:each="area, iter : ${local}" th:value="${iter.index + 1}" th:text="${area}"></option>
+		</select>
+
+		<img class="inner"
+			 src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
+			 onclick="list()" style="height: 30px; width: 30px; margin-top:55px; margin-left:20px;">
+	</div>
+
+	<!-- 리스트 -->
+	<div style="border: 1px solid #023476; background-color: white; float: left; height: 950px; width: 400px; text-align: left; overflow-y: auto;">
+		<div id="job_list"></div>
+	</div>
+
+	<!-- 지도 -->
+	<div id="map" style="border: 1px solid #023476; width:1070px; height:950px;"></div>
+</th:block>
+<th:block layout:fragment="script">
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08"></script>
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			// cd1 css 값 변경
+			document.querySelector('.cd1').style.marginLeft = '112px';
+			document.querySelector('.cd1').style.marginTop = '0px';
+			document.querySelector('.cd1').style.width = '1470px';
+			document.querySelector('.content').style.marginBottom = '0px';
+
+			// 취업 희망지역 리스트 조회
+			getSido();
+			getSgg();
+
+			// 취업정보 리스트 조회
+			list();
+
+			const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+			let options = { //지도를 생성할 때 필요한 기본 옵션
+				center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+				level: 3 //지도의 레벨(확대, 축소 정도)
+			};
+			let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+		});
+
+
+		// 취업정보 리스트 조회
+		function list() {
+
+			// 검색 키워드
+			const apiKey = 'i6iLnKAYEOB20WqhX9ivAOPmBkBg47tIbSMcBnDQB5tIDegKkooBm';
+			const locCd = $("#sgg").val();
+			const indCd = $("#srch_rqr1").val();
+
+			fetch(`https://oapi.saramin.co.kr/job-search?access-key=${apiKey}&loc_cd=${locCd}&ind_cd=${indCd}&count=10`).then(response => {
+				if(!response.ok) {
+					throw new Error('Request failed...');
+				}
+				return response.json();
+			}).then(json => {
+
+				let html = '<div style="height:5px;"></div>';
+				$('#job_list').empty();
+				json.jobs.job.forEach(function (data, idx){
+					console.log(data);
+					html += `<a href="${data.company.detail.href}" target='_blank' style="color: #023476; font-size:larger; margin-left: 7px;">${data.company.detail.name}</a>
+							 <div class="job_div">
+								 <div style="font-size: large;font-weight: bold;">※&nbsp;${data.position.title}</div>
+								 <ul style="padding-left: 20px;">
+									<li><strong>경력</strong> - <span style="color: blue">${data.position['experience-level'].name}</span></li>
+									<li><b>학력</b> - <span style="color: blue">${data.position['required-education-level'].name}</span></li>
+									<li><b>근무형태</b> - <span style="color: blue">${data.position['job-type'].name}</span></li>
+									<li><b>직무</b> - ${data.position['job-mid-code'].name}&nbsp;<span style="font-size: small;">(${data.position['job-code'].name})</span></li>
+									<li><b>급여</b> - ${data.salary.name}</li>
+									<li><b>근무지</b> - ${data.position.location.name}</li>
+									<li><b>마감일</b> - ${data['close-type'].name}</li>
+									<button class="btn btn-space" style="width: 90px;height:37px; margin-left: 233px;padding: 0px;" onclick="window.open('${data.url}')">상세</button>
+								 </ul>
+							 </div>
+					`;
+				});
+				$('#job_list').append(html);
+
+			}).catch(error => {
+				alert('취업 정보를 찾을 수 없습니다.');
+			})
+		}
+
+		// 특별시도 리스트
+		function getSido() {
+			fetch('/members/api/getSido').then(response => {
+				if(response.ok) {
+					return response.json();
+				} else {
+					alert('문제가 발생하였습니다.');
+				}
+			}).then(json => {
+				let html = '';
+
+				if(!json.length){
+					alert('해당하는 정보가 존재하지 않습니다.');
+				} else {
+					json.forEach((obj, idx) => {
+						html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+					 `;
+					});
+				}
+
+				$('#sido').append(html);
+			});
+		}
+
+		// 특별시도 선택시 하위 시군구 출력
+		function getSgg(){
+			$("#sido").on("change", function() {
+				const sido = $("#sido").val();
+				if (sido !== "") {
+					fetch(`/members/api/getSgg?sido=${sido}`).then(response => {
+						if(response.ok) {
+
+							return response.json();
+						}
+					}).then(json => {
+						let html = '';
+						if(!json.length) {
+
+						} else {
+							$('#sgg').empty();
+							json.forEach((obj, idx) => {
+								html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+							 `;
+							})
+							$('#sgg').append(html);
+						}
+					});
+				}
+			});
+		}
+	</script>
 </th:block>
 </html>

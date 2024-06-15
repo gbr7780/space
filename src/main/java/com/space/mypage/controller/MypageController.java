@@ -235,6 +235,9 @@ public class MypageController {
 		Long id = principalDetails.getMember().getId();
 		Member member = memberRepository.findMemberById(id);
 		model.addAttribute("member", member);
+
+		// 관심 분야
+		model.addAttribute("local", Area.values());
 		return "/myPage/mypageJob";
 	}
 
