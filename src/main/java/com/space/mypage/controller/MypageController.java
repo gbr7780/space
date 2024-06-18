@@ -241,6 +241,19 @@ public class MypageController {
 		return "/myPage/mypageJob";
 	}
 
+	@GetMapping("/JobCalendar")
+	public String JobCalendar(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
+		Long id = principalDetails.getMember().getId();
+		Member member = memberRepository.findMemberById(id);
+		model.addAttribute("sgg", member.getSggCd());
+		model.addAttribute("area", member.getArea());
+		return "/myPage/JobCalendar";
+	}
+
+
+
+
+
 	// ckeditor 이미지 처리
 	@PostMapping(value = "/image/upload")
 	public ModelAndView image(MultipartHttpServletRequest request) throws Exception {
