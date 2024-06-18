@@ -349,7 +349,6 @@
 
 		$(document).ready(function (){
 			var memberSggcd = /*[[ ${member.sggCd} ]]*/;
-			debugger;
 			getSido(memberSggcd);
 			getSgg(memberSggcd);
 			//setMemberSgg(memberSggcd);
@@ -369,7 +368,6 @@
 			if(!data.length){
 				alert('해당하는 정보가 존재하지 않습니다.');
 			} else {
-				debugger
 				data.forEach((obj, idx) => {
 					/*
 					html += `

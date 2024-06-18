@@ -29,23 +29,23 @@
 		<h2 class="inner" style="font-weight: bold; margin-left: 110px;">[&nbsp;&nbsp;&nbsp;채용 공고&nbsp;&nbsp;&nbsp;]</h2>
 
 		<!-- 취업 희망 지역 -->
-		<select class="form-select inner" id="sido" aria-label="Default select example" style="padding-top:5px; width:195px; height:50px; margin-left:350px;">
+		<select class="form-select inner" id="sido" name="sido" aria-label="Default select example" style="padding-top:5px; width:195px; height:50px; margin-left:350px;">
 			<option value="">특별시∙도</option>
 		</select>
 
-		<select class="form-select inner" id="sgg" aria-label="Default select example" style="padding-top:5px; width: 195px;height: 50px; margin-left:20px;">
+		<select class="form-select inner" id="sgg"  name="sgg" aria-label="Default select example" style="padding-top:5px; width: 195px;height: 50px; margin-left:20px;">
 			<option value="">시∙군∙구</option>
 		</select>
 
 		<!-- 관심 분야 -->
 		<select class="form-select border-1 inner" id="srch_rqr1" style="height: 50px; width: 195px; margin-left: 20px;">
 			<option selected value="">관심분야</option>
-			<option th:each="area, iter : ${local}" th:value="${iter.index + 1}" th:text="${area}"></option>
+			<option th:each="area, iter : ${local}" th:value="${iter.index + 1}" th:text="${area}" th:selected="${area} == ${member.area}"></option>
 		</select>
 
 		<img class="inner"
 			 src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
-			 onclick="list()" style="height: 30px; width: 30px; margin-top:55px; margin-left:20px;">
+			 onclick="search()" style="height: 30px; width: 30px; margin-top:55px; margin-left:20px;">
 	</div>
 
 	<!-- 리스트 -->
@@ -57,9 +57,36 @@
 	<div id="map" style="border: 1px solid #023476; width:1070px; height:950px;"></div>
 </th:block>
 <th:block layout:fragment="script">
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08"></script>
+	<!--	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08"></script>-->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08&libraries=services,clusterer,drawing"></script>
 
 	<script th:inline="javascript">
+		// 취업정보 시작 페이지 번호
+		var start = 0;
+
+		var html = '<div style="height:5px;"></div>';
+
+		// 지도를 생성
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+				mapOption = {
+					center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+					level: 3 // 지도의 확대 레벨
+				};
+
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+
+		var addrList = [];
+
+		// 클러스터 정보
+		var clustererList = [];
+		// var clustererList = [
+		// 	{lat: 37.5662141900954, lng: 126.901955141101},
+		// 	{lat: 37.6028174370823, lng: 126.928940981464},
+		// 	{lat: 37.4782566343104, lng: 126.951521225531},
+		// 	{lat: 37.579161863979, lng: 126.9368156604},
+		// 	{lat: 37.6028174370823,lng:126.928940981464},{lat:37.4782566343104,lng:126.951521225531},{lat:37.579161863979,lng:126.9368156604},{lat:37.4782566343104,lng:126.951521225531},{lat:37.566826004661,lng:126.978652258309},{lat:37.5662141900954,lng:126.901955141101},{lat:37.579161863979,lng:126.9368156604},{lat:37.6028174370823,lng:126.928940981464},{lat:37.2749769872425,lng:127.00892996953},{lat:37.4785674780314,lng:126.864647815161},{lat:37.3942588031863,lng:126.956860524882},{lat:37.5035117792843,lng:126.766038450927},{lat:37.6374795939323,lng:126.832188086806},{lat:37.6584289395157,lng:126.831977751081},{lat:37.6588746240831,lng:126.775008021538},{lat:37.6751982696279,lng:126.750669084916},{lat:37.7600449967303,lng:126.779881359268},{lat:37.6152686898333,lng:126.715657922927},{lat:37.380115071596,lng:126.802977796436},{lat:37.537495668283,lng:126.73770466472},{lat:37.4473487903571,lng:126.73148773974},{lat:37.5454335160344,lng:126.676028468221},{lat:37.8949928340087,lng:127.200332890652},{lat:37.4101013788811,lng:126.678274850516},{lat:37.5070416636403,lng:126.721864167603},{lat:37.4560044656444,lng:126.705258070068},{lat:37.7465683959168,lng:126.488039602372},{lat:37.5173319258532,lng:127.047377408384},{lat:37.5509646154244,lng:126.849533759514},{lat:37.5263635705036,lng:126.896273923703},{lat:37.5169884752609,lng:126.866501409661},{lat:37.5385583136667,lng:127.082385189457},{lat:37.5638077703601,lng:126.997555182293},{lat:37.5735042429813,lng:126.978989954189},{lat:37.6360236390493,lng:127.216475764948},{lat:37.2635846787744,lng:127.028715898311},{lat:37.241029979227,lng:127.177482330871},{lat:37.199537203472,lng:126.831477350333},{lat:37.4954330863648,lng:126.88750531451},{lat:37.2722675901776,lng:127.435089282738},{lat:37.4568411485785,lng:126.895456780023},{lat:37.7380566430617,lng:127.033899090337},{lat:35.8250815854681,lng:128.741316589036},{lat:35.8562184605051,lng:129.22478171309},{lat:36.1195708487143,lng:128.344246361062},{lat:36.0189954294771,lng:129.343164578825},{lat:37.6397513275882,lng:127.025538071854},{lat:37.5745229817122,lng:127.039657001091},{lat:37.4199323570328,lng:127.12629039752},{lat:37.563427205337,lng:127.036930141185},{lat:37.483588810333,lng:127.032734543897},{lat:37.51458371944,lng:127.10591770866},
+		// ];
+
 		$(document).ready(function() {
 			// cd1 css 값 변경
 			document.querySelector('.cd1').style.marginLeft = '112px';
@@ -68,113 +95,288 @@
 			document.querySelector('.content').style.marginBottom = '0px';
 
 			// 취업 희망지역 리스트 조회
-			getSido();
-			getSgg();
+			var memberSggcd = /*[[ ${member.sggCd} ]]*/;
+			getSido(memberSggcd);
+			getSgg(memberSggcd);
 
-			// 취업정보 리스트 조회
-			list();
-
-			const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-			let options = { //지도를 생성할 때 필요한 기본 옵션
-				center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-				level: 3 //지도의 레벨(확대, 축소 정도)
-			};
-			let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 		});
 
+		// 특별시도 선택 상위 시도 출력
+		async function getSido(memberSggcd) {
+			var memberSggcd = memberSggcd;
+			var response = await fetch('/members/api/getSido');
+			var data = await response.json();
+			let html = '';
 
-		// 취업정보 리스트 조회
-		function list() {
+			if(!data.length){
+				alert('해당하는 정보가 존재하지 않습니다.');
+			} else {
+				data.forEach((obj, idx) => {
+					if(memberSggcd.substring(0,3) == obj.sggCd.substring(0,3)) {
+						html += `
+					 		<option value="${obj.sggCd}" selected>${obj.sggNm}</option>
+							 `;
+					} else {
+						html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+							 `;
+					}
+				});
+			}
+			$('#sido').append(html).trigger("change");
+		}
+
+		// 특별시도 선택시 하위 시군구 출력
+		function getSgg(memberSggcd){
+			var memberSggcd = memberSggcd;
+			$(document).on("change","select[name=sido]",async function () {
+				const sido = $("#sido").val();
+				if (sido !== "") {
+					var response = await fetch(`/members/api/getSgg?sido=${sido}`);
+					var data = await response.json();
+					let html = '';
+					$('#sgg').empty();
+					data.forEach((obj, idx) => {
+						if(memberSggcd == obj.sggCd) {
+							html += `
+					 		<option value="${obj.sggCd}" selected>${obj.sggNm}</option>
+							 `;
+						} else {
+							html += `
+					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
+							 `;
+						}
+					})
+					$('#sgg').append(html);
+
+				}
+				// 취업정보 리스트 조회
+				await list_init();
+
+				// 지도
+				await f_map();
+			});
+		}
+
+		// 취업정보 리스트 조회 초기 설정
+		function list_init() {
+			start = 0;
+			html = '<div style="height:5px;"></div>';
 
 			// 검색 키워드
-			const apiKey = 'i6iLnKAYEOB20WqhX9ivAOPmBkBg47tIbSMcBnDQB5tIDegKkooBm';
+			const apiKey = '2cqotQk9IgKxjyaZedgwoeyrZNzNiySaiFyH5fEN5u6p9Oawf7S';
 			const locCd = $("#sgg").val();
 			const indCd = $("#srch_rqr1").val();
 
-			fetch(`https://oapi.saramin.co.kr/job-search?access-key=${apiKey}&loc_cd=${locCd}&ind_cd=${indCd}&count=10`).then(response => {
+			fetch(`https://oapi.saramin.co.kr/job-search?access-key=${apiKey}&loc_cd=${locCd}&ind_cd=${indCd}&count=100&start=${start}`).then(response => {
 				if(!response.ok) {
 					throw new Error('Request failed...');
 				}
 				return response.json();
 			}).then(json => {
+				// let html = '<div style="height:5px;"></div>';
 
-				let html = '<div style="height:5px;"></div>';
 				$('#job_list').empty();
 				json.jobs.job.forEach(function (data, idx){
 					console.log(data);
-					html += `<a href="${data.company.detail.href}" target='_blank' style="color: #023476; font-size:larger; margin-left: 7px;">${data.company.detail.name}</a>
-							 <div class="job_div">
-								 <div style="font-size: large;font-weight: bold;">※&nbsp;${data.position.title}</div>
-								 <ul style="padding-left: 20px;">
-									<li><strong>경력</strong> - <span style="color: blue">${data.position['experience-level'].name}</span></li>
-									<li><b>학력</b> - <span style="color: blue">${data.position['required-education-level'].name}</span></li>
-									<li><b>근무형태</b> - <span style="color: blue">${data.position['job-type'].name}</span></li>
-									<li><b>직무</b> - ${data.position['job-mid-code'].name}&nbsp;<span style="font-size: small;">(${data.position['job-code'].name})</span></li>
-									<li><b>급여</b> - ${data.salary.name}</li>
-									<li><b>근무지</b> - ${data.position.location.name}</li>
-									<li><b>마감일</b> - ${data['close-type'].name}</li>
-									<button class="btn btn-space" style="width: 90px;height:37px; margin-left: 233px;padding: 0px;" onclick="window.open('${data.url}')">상세</button>
-								 </ul>
-							 </div>
-					`;
+					f_for(data);
 				});
+
 				$('#job_list').append(html);
 
+				if((json.jobs.total > (start+1) *100) && (start <= 10)){
+					start += 1;
+					list();
+				} else {
+					$('#job_list').append(html);
+					f_clusterer();
+				}
 			}).catch(error => {
 				alert('취업 정보를 찾을 수 없습니다.');
 			})
 		}
 
-		// 특별시도 리스트
-		function getSido() {
-			fetch('/members/api/getSido').then(response => {
-				if(response.ok) {
-					return response.json();
-				} else {
-					alert('문제가 발생하였습니다.');
-				}
-			}).then(json => {
-				let html = '';
+		// 취업정보 리스트 조회
+		async function list() {
 
-				if(!json.length){
-					alert('해당하는 정보가 존재하지 않습니다.');
-				} else {
-					json.forEach((obj, idx) => {
-						html += `
-					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
-					 `;
-					});
-				}
+			// 검색 키워드
+			const apiKey = '2cqotQk9IgKxjyaZedgwoeyrZNzNiySaiFyH5fEN5u6p9Oawf7S';
+			const locCd = $("#sgg").val();
+			const indCd = $("#srch_rqr1").val();
 
-				$('#sido').append(html);
+
+			var response = await fetch(`https://oapi.saramin.co.kr/job-search?access-key=${apiKey}&loc_cd=${locCd}&ind_cd=${indCd}&count=100`);
+			var json = await response.json();
+
+			debugger;
+			json.jobs.job.forEach(function (data, idx){
+				f_for(data);
 			});
+
+			if((json.jobs.total > (start+1) *100) && (start <= 10)){
+				start += 1;
+				await list();
+			} else {
+				$('#job_list').append(html);
+
+				await f_map();
+
+				f_clusterer();
+			}
 		}
 
-		// 특별시도 선택시 하위 시군구 출력
-		function getSgg(){
-			$("#sido").on("change", function() {
-				const sido = $("#sido").val();
-				if (sido !== "") {
-					fetch(`/members/api/getSgg?sido=${sido}`).then(response => {
-						if(response.ok) {
+		// 취업정보 반복문 내부
+		function f_for(data){
+			html += `<a href="${data.company.detail.href}" target='_blank' style="color: #023476; font-size:larger; margin-left: 7px;">${data.company.detail.name}</a>
+				 <div class="job_div">
+					 <div style="font-size: large;font-weight: bold;">※&nbsp;${data.position.title}</div>
+					 <ul style="padding-left: 20px;">
+						<li><strong>경력</strong> - <span style="color: blue">${data.position['experience-level'].name}</span></li>
+						<li><b>학력</b> - <span style="color: blue">${data.position['required-education-level'].name}</span></li>
+						<li><b>근무형태</b> - <span style="color: blue">${data.position['job-type'].name}</span></li>
+						<li><b>직무</b> - ${data.position['job-mid-code'].name}&nbsp;<span style="font-size: small;">(${data.position['job-code'].name})</span></li>
+						<li><b>급여</b> - ${data.salary.name}</li>
+						<li><b>근무지</b> - ${data.position.location.name}</li>
+						<li><b>마감일</b> - ${data['close-type'].name}</li>
+						<button class="btn btn-space" style="width: 90px;height:37px; margin-left: 233px;padding: 0px;" onclick="window.open('${data.url}')">상세</button>
+					 </ul>
+				 </div>
+			`;
 
-							return response.json();
-						}
-					}).then(json => {
-						let html = '';
-						if(!json.length) {
+			var str_adr_list = data.position.location.name.split(',');
 
-						} else {
-							$('#sgg').empty();
-							json.forEach((obj, idx) => {
-								html += `
-					 		<option value="${obj.sggCd}">${obj.sggNm}</option>
-							 `;
-							})
-							$('#sgg').append(html);
-						}
-					});
+			for (let i = 0; i < str_adr_list.length; i++) {
+				var str_adr = str_adr_list[i].replace(' &gt;', '');
+
+				if (str_adr.includes('전체')) {
+					// 띄어쓰기 기준으로 첫 번째 단어만 남기고 나머지 제거
+					str_adr = str_adr.split(' ')[0];
 				}
+
+
+				// positions 배열에서 adr이 a와 같은 항목 찾기
+				let found = false;
+				for (let i = 0; i < addrList.length; i++) {
+					if (addrList[i].adr === str_adr) {
+						addrList[i].cnt += 1; // count 증가
+						found = true;
+						break;
+					}
+				}
+				// 항목이 없는 경우 새 항목 추가
+				if (!found) {
+					addrList.push({ adr: str_adr, cnt: 1 });
+				}
+			}
+		}
+
+		// 지도 위치 표시
+		function f_map(){
+			// 상위
+			const sido = document.querySelector('#sido');
+			const sidoOption = sido.options[sido.selectedIndex];
+			const sidoText = sidoOption.text;
+
+			// 하위
+			const sgg = document.querySelector('#sgg');
+			const sggOption = sgg.options[sgg.selectedIndex];
+			const sggText = sggOption.text;
+
+			const adr = sidoText + " " + sggText
+
+			// 주소-좌표 변환 객체를 생성
+			var geocoder = new kakao.maps.services.Geocoder();
+
+			// 주소로 좌표를 검색
+			geocoder.addressSearch(adr, function(result, status) {
+
+				// 정상적으로 검색이 완료됐으면
+				if (status === kakao.maps.services.Status.OK) {
+
+					var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+					// 지도의 중심을 결과값으로 받은 위치로 이동
+					map.setCenter(coords);
+				}
+			});
+
+			// var positions = [
+			// 	{
+			// 		title: '안양역',
+			// 		"lat": 37.402707,
+			// 		"lng": 126.922044
+			// 	},
+			// 	{
+			// 		title: '안양역 주위 1',
+			// 		"lat": 37.400707,
+			// 		"lng": 126.920044
+			// 	},
+			// 	{
+			// 		title: '안양역 주위 2',
+			// 		"lat": 37.403007,
+			// 		"lng": 126.925044
+			// 	},
+			// 	{
+			// 		title: '안양역 주위 3',
+			// 		"lat": 37.405707,
+			// 		"lng": 126.925044
+			// 	}
+			// ];
+			//
+			// var markers = positions.map(function(position) {  // 마커를 배열 단위로 묶음
+			// 	return new kakao.maps.Marker({
+			// 		position : new kakao.maps.LatLng(position.lat, position.lng)
+			// 	});
+			// });
+			//
+			// var clusterer = new kakao.maps.MarkerClusterer({
+			// 	map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+			// 	averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+			// 	minLevel: 5, // 클러스터 할 최소 지도 레벨
+			// 	markers: markers // 클러스터에 마커 추가
+			// });
+		}
+
+		// 검색
+		function search() {
+			list_init();
+			f_map();
+		}
+
+		// 클러스터
+		function f_clusterer(){
+			//주소-좌표 변환 객체를 생성
+			var geocoder = new kakao.maps.services.Geocoder();
+
+			for (let i = 0; i < addrList.length; i++) {
+
+				// 주소로 좌표를 검색
+				geocoder.addressSearch(addrList[i].adr, function(result, status) {
+
+					// 정상적으로 검색이 완료됐으면
+					if (status === kakao.maps.services.Status.OK) {
+
+						var coords = new kakao.maps.LatLng(result[0].x, result[0].y);
+
+						// 클러스터 리스트에 추가
+						let newLocation = { "lat": coords.La, "lng": coords.Ma };
+						// 배열에 객체 추가
+						clustererList.push(newLocation);
+					}
+				});
+			}
+
+			var markers = clustererList.map(function(position) {  // 마커를 배열 단위로 묶음
+				return new kakao.maps.Marker({
+					position : new kakao.maps.LatLng(position.lat, position.lng)
+				});
+			});
+
+			var clusterer = new kakao.maps.MarkerClusterer({
+				map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+				averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+				minLevel: 5, // 클러스터 할 최소 지도 레벨
+				markers: markers // 클러스터에 마커 추가
 			});
 		}
 	</script>

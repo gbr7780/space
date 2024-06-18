@@ -223,13 +223,7 @@ public class MypageController {
 		return "redirect:/mypage/space";
 	}
 
-	/**
-	 * 24.05.07 KJH
-	 * 취업 관리
-	 * @param principalDetails
-	 * @param model
-	 * @return mypageJob.html
-	 */
+	/** 취업 관리  - 채용 공고 */
 	@GetMapping("/job")
 	public String mypageJob(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
 		Long id = principalDetails.getMember().getId();
