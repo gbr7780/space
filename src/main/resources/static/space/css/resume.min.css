@@ -4,7 +4,8 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-resume/blob/master/LICENSE)
  */
 body {
-	font-family: 'Open Sans', serif;
+	/*font-family: 'Open Sans', serif;*/
+	font-family: Gothic A1', sans-serif;
 	padding-top: 54px;
 	color: #868e96
 }
@@ -17,9 +18,10 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'Saira Extra Condensed', serif;
+	/*font-family: 'Saira Extra Condensed', serif;*/
+	font-family: Gothic A1', sans-serif;
 	font-weight: 700;
-	text-transform: uppercase;
+	/*text-transform: uppercase;*/
 	color: #343a40
 }
 
@@ -83,7 +85,7 @@ h2 {
 	#sideNav .navbar-brand .img-profile {
 		max-width: 10rem;
 		max-height: 10rem;
-		border: .5rem solid rgba(255, 255, 255, .2)
+		/*border: .5rem solid rgba(255, 255, 255, .2)*/
 	}
 	#sideNav .navbar-collapse {
 		display: flex;
