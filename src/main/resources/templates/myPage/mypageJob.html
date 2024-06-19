@@ -126,13 +126,16 @@
 		.fc-col-header-cell-cushion {
 			color: #023476;
 		}
+
+
+
 	</style>
 </th:block>
 
 <th:block layout:fragment="content">
 
 	<div class="job_header">
-		<img src="/img/calendar.png" onclick="popOpen();" style="width: 75px; height: 75px; float: left; margin-top: 26px; margin-left: 45px;">
+		<img src="/img/calendar.png" onclick="popOpen();" style="width: 75px; height: 75px; float: left; margin-top: 26px; margin-left: 45px;cursor: pointer;">
 		<h2 class="inner" style="font-weight: bold; margin-left: 110px;">[&nbsp;&nbsp;&nbsp;채용 공고&nbsp;&nbsp;&nbsp;]</h2>
 
 		<!-- 취업 희망 지역 -->
@@ -333,7 +336,6 @@
 			var response = await fetch(`https://oapi.saramin.co.kr/job-search?access-key=${apiKey}&loc_cd=${locCd}&ind_cd=${indCd}&count=100`);
 			var json = await response.json();
 
-			debugger;
 			json.jobs.job.forEach(function (data, idx){
 				f_for(data);
 			});
@@ -513,6 +515,7 @@
 			var date = getToday();
 			const apiKey = 'BoFlNwElGZxzfuD1Wvir1OjKRPmf5oi9MLHRyHrXKPci3R6T4mou';
 			var locCd = /*[[ ${sgg} ]]*/;
+			getIndCd()
 			var indCd = 1;
 
 
@@ -685,8 +688,15 @@
 		// 사람인 API 호출
 		function fetchEvents(info, successCallback, failureCallback) {
 			const apiKey = '2cqotQk9IgKxjyaZedgwoeyrZNzNiySaiFyH5fEN5u6p9Oawf7S';
-			var locCd = /*[[ ${sgg} ]]*/;
-			var indCd = 1;
+			var locCd = /*[[ ${member.sggCd} ]]*/;
+			var area = /*[[ ${member.area} ]]*/;
+			var indCd = getIndCd(area);
+			if(indCd == null) {
+				alert('관심분야를 찾을수 없습니다.');
+				return false;
+			}
+
+
 
 			var published_min = moment(info.startStr).format('YYYY-MM-DD') + ' 00:00:00';
 			var published_max = moment(info.endStr).format('YYYY-MM-DD') + ' 23:59:59';
@@ -715,6 +725,44 @@
 						console.error('Error fetching events:', error);
 						failureCallback(error);
 					});
+		}
+
+
+		function getIndCd(area) {
+			if(area === '서비스업'){
+				return 1;
+			}
+			else if (area === '제조_화학') {
+				return 2;
+			}
+			else if(area === 'IT_웹_통신') {
+				return 3;
+			}
+			else if(area === '은행_금융업'){
+				return 4;
+			}
+			else if(area === '미디어_디자인'){
+				return 5;
+			}
+			else if(area === '교육업'){
+				return 6;
+			}
+			else if(area === '의료_제약_복지'){
+				return 7;
+			}
+			else if(area === '판매_유통'){
+				return 8;
+			}
+			else if(area === '건설업'){
+				return 9;
+			}
+			else if(area === '기관_협회'){
+				return 10;
+			}
+			else {
+				return null;
+			}
+
 		}
 	</script>
 </th:block>
