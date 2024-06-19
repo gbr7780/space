@@ -19,13 +19,120 @@
 			height: auto;
 			width: 370px;
 		}
+
+		#fc-dom-1 {
+			font-weight: bold;
+		}
+
+		#calendar {
+			max-width: 1100px;
+			width: 1100px;
+			height: 800px;
+			margin: 0 auto;
+		}
+
+		.btn-space {
+			background-color: #023476;
+			color: white;
+			border-color: #094B80;
+			font-size: 20px;
+			width: 30px;
+			height: 30px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+		.fc .fc-non-business {
+			background: #f2f6fb;
+		}
+
+		.fc-col-header-cell-cushion {
+			text-transform: uppercase;
+		}
+		/*
+        .fc-scrollgrid-sync-inner {
+            height: 30px;
+        }
+          */
+		.fc-col-header-cell-cushion {
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+
+		.fc .fc-daygrid-day-number {
+			font-size: 17px;
+			color: #023476;
+		}
+		.fc-day-sun .fc-daygrid-day-number{
+			color: red;
+		}
+		.fc-day-sat .fc-daygrid-day-number{
+			color: blue;
+		}
+		.posting {
+			background: #3788d8;
+			border: none;
+			color: #FFFFFF;
+			padding: 6px 12px 6px 12px;
+		}
+		.deadline {
+			background: #ff9f89;
+			border: none;
+			color: #FFFFFF;
+			padding: 6px 12px 6px 12px;
+			margin-right: 10px;
+		}
+
+		/* popup*/
+		.bg_mask{background:rgba(0,0,0,.6);position:absolute;top:0;bottom:0;left:0;right:0;z-index:9999999}
+		.popup{border:1px solid #1c223a; background:#fff;position:absolute;top:40%;left:60%;width:80%;transform:translateX(-50%) translateY(-50%)}
+		.popup .pop_top {background:#023476;color:#fff;position:relative;text-indent:20px;font-size:larger;line-height:45px}
+		.popup .pop_top .btnpClose{position:absolute;top:50%;right:0px;width:34px;text-align:center;text-indent:0;display:block;transform:translateY(-50%);height: 34px;line-height: 32px;}
+		.p_btn {padding: 0 0 10px;text-align:center}
+		.popup .alert_top {position:relative;line-height:12px}
+		.popup .alert_top .btnpClose{position:absolute;top:7px;right:0px;bottom:0;width:34px;text-align:center;text-indent:0}
+		.alertbx p{padding-left:0px}
+		.tbview {line-height:1.3;border-top:1px solid #dee3e9;margin: 25px;}
+		.tbview table{width:100%;}
+		.tbview tbody th {padding:8px 10px; color:#0059a5;font-weight:400;border-right:1px solid #dee3e9; border-bottom:1px solid #dee3e9; background-color:#f2f6fb;}
+		.tbview tbody td {padding:8px 10px; color:#333; border-right:1px solid #dee3e9; border-bottom:1px solid #dee3e9;min-height:20px;}
+		.tbview thead th:last-child, .tbview tbody th:last-child, .tbview tbody td:last-child{border-right:none}
+		.tbview th span{color: #fe4f14;}
+
+		.tbview td select{width:100%}
+
+		.popup {
+			/*팝업 배경*/
+			display: none; /*평소에는 보이지 않도록*/
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			width: 100%;
+			height: 100vh;
+			overflow: hidden;
+			background: rgba(0,0,0,0.5);
+			z-index: 1000;
+		}
+		.popup .modal_popup {
+			/*팝업*/
+			position: absolute;
+			top: 50%;
+			left: 60%;
+			transform: translate(-50%, -50%);
+			background: #ffffff;
+		}
+		.popup a {
+			text-decoration-line: none;
+		}
+		.fc-col-header-cell-cushion {
+			color: #023476;
+		}
 	</style>
 </th:block>
 
 <th:block layout:fragment="content">
 
 	<div class="job_header">
-		<img src="/img/calendar.png" style="width: 75px; height: 75px; float: left; margin-top: 26px; margin-left: 45px;">
+		<img src="/img/calendar.png" onclick="popOpen();" style="width: 75px; height: 75px; float: left; margin-top: 26px; margin-left: 45px;">
 		<h2 class="inner" style="font-weight: bold; margin-left: 110px;">[&nbsp;&nbsp;&nbsp;채용 공고&nbsp;&nbsp;&nbsp;]</h2>
 
 		<!-- 취업 희망 지역 -->
@@ -55,10 +162,26 @@
 
 	<!-- 지도 -->
 	<div id="map" style="border: 1px solid #023476; width:1070px; height:950px;"></div>
+
+	<!-- 캘린더 팝업 -->
+	<div class="popup">
+		<div class="modal_popup">
+			<p class="pop_top">[ 채용 일정 ]<a href="#" class="btnpClose"><img src="/img/close.png" alt="닫기" style="margin-right:10px; width:60%;" onClick="javascript:popClose();" /></a></p>
+			<div class="p_cont">
+				<div id='calendar'>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /캘린더 팝업  -->
 </th:block>
 <th:block layout:fragment="script">
 	<!--	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08"></script>-->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8d88fe30f1babaf45150d93fec381f08&libraries=services,clusterer,drawing"></script>
+	<!-- 사용자 스크립트 추가 -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src='/myPage/js/index.global.js'></script>
 
 	<script th:inline="javascript">
 		// 취업정보 시작 페이지 번호
@@ -93,6 +216,8 @@
 			document.querySelector('.cd1').style.marginTop = '0px';
 			document.querySelector('.cd1').style.width = '1470px';
 			document.querySelector('.content').style.marginBottom = '0px';
+
+			popClose();  // 팝업 닫기
 
 			// 취업 희망지역 리스트 조회
 			var memberSggcd = /*[[ ${member.sggCd} ]]*/;
@@ -378,6 +503,218 @@
 				minLevel: 5, // 클러스터 할 최소 지도 레벨
 				markers: markers // 클러스터에 마커 추가
 			});
+		}
+
+		// 캘린더 팝업 열기
+		function popOpen() {
+			var modalPop = $('.popup');
+			$(modalPop).show();
+
+			var date = getToday();
+			const apiKey = 'BoFlNwElGZxzfuD1Wvir1OjKRPmf5oi9MLHRyHrXKPci3R6T4mou';
+			var locCd = /*[[ ${sgg} ]]*/;
+			var indCd = 1;
+
+
+
+			var calendarEl = document.getElementById('calendar');
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+
+				headerToolbar: {
+					left: '',
+					center: 'title',
+					right: ''
+				},
+				initialView: 'dayGridMonth',
+				customButtons : {
+					customPrevButton : {
+						text : 'prev',
+						click : function () {
+							alert()
+						}
+					}
+				},
+				initialDate: getToday(),
+				navLinks: true, // can click day/week names to navigate views
+				businessHours: true, // display business hours
+				editable: true,
+				selectable: true,
+				events : fetchEvents,
+				eventsSet: function() {
+					// 5개 넘을시 말줄임표
+					renderEventsWithEllipsis();
+				},
+				eventClick: function(info) {
+					if (info.event.url) {
+						window.open(info.event.url, '_blank'); // 새 창으로 링크 열기
+						info.jsEvent.preventDefault(); // 링크 기본 동작 방지
+					}
+				},
+
+			});
+
+			calendar.render();
+
+			document.querySelector('.fc-header-toolbar').style.height = '20px';
+			$('#fc-dom-1').prepend('<button class="btn-space"style="margin-right:20px;" id="prevButton"><</button>');
+			$('#fc-dom-1').append('<button class="btn-space"style="margin-left:20px"id="nextButton">></button>');
+			$('.fc-toolbar-chunk:eq(2)').append('<button class="posting">게시</button>');
+			$('.fc-toolbar-chunk:eq(2)').append('<button class="deadline">마감</button>');
+			$('.fc-toolbar-chunk:eq(1)').css("margin-left",130)
+
+
+			// 날짜가 변경될 때마다 호출되는 콜백 함수
+			calendar.on('datesSet', async function(dateInfo) {
+				/* 마감일 add 로직 .. 사람인 API 일일 최대 호출횟수 때문에 주석처리
+                var currentDate = calendar.getDate();
+
+                    var eventArray = [];
+                    for(let day = 1; day <= getLastDayOfMonth(currentDate,'fmt'); day++){
+                        var year = currentDate.getFullYear();
+                        var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+
+                        if(day < 10){
+                            day = ('0'+day);
+                        }
+
+                        var date = year +'-' + month + '-' + day;
+
+                        const response = await fetch('https://oapi.saramin.co.kr/job-search?access-key='+apiKey+'&loc_cd='+locCd+'&ind_cd='+indCd+'&deadline='+ date +'&count=110',{});
+                        const data = await response.json();
+                        data.jobs.job.forEach(function (data){
+
+                            let event = {
+                                title: data.company.detail.name,
+                                start: date,
+                                color: '#ff9f89'
+                            }
+                            eventArray.push(event);
+                        });
+                    }
+                    // 이벤트 배열 추가
+                    calendar.addEventSource(eventArray);
+
+                 */
+			});
+
+			// 커스텀 버튼 클릭 이벤트 설정
+			$("#prevButton").click(function (){
+				calendar.prev();
+			})
+
+			$("#nextButton").click(async function (){
+				calendar.next();
+			})
+
+			document.querySelector('.popup').style.textDecorationLine = 'none';
+		}
+
+		// 캘린더 팝업 닫기
+		function popClose() {
+			var modalPop = $('.popup');
+			$(modalPop).hide();
+		}
+
+		// 팝업 불투명
+		function showPopBlur(chk){
+			if(chk == false)
+				$('.content').css({"opacity" : "1","pointer-events":"auto"});
+			else
+				$('.content').css({"opacity" : "0.3","pointer-events":"none"});
+		}
+
+		// 오늘 날짜 구하는 함수
+		function getToday(){
+			var date = new Date();
+			var year = date.getFullYear();
+			var month = ("0" + (1 + date.getMonth())).slice(-2);
+			var day = ("0" + date.getDate()).slice(-2);
+			return year + "-" + month + "-" + day;
+		}
+
+		// 월의 마지막 날을 반환하는 함수
+		function getLastDayOfMonth(date,type) {
+			if(type === 'fmt'){
+				var year = date.getFullYear();
+				var month = date.getMonth(); // 0부터 시작하므로 현재 월 그대로 사용
+				var nextMonth = new Date(year, month + 1, 0); // 다음 월의 첫 날을 구하고, 하루를 빼서 마지막 날을 구함
+				return nextMonth.getDate();
+			}
+			else {
+				var parts = date.split('-');
+				var year = parseInt(parts[0]);
+				var month = parseInt(parts[1]);
+				// 다음 달의 첫 날을 구하고, 하루를 빼서 해당 월의 마지막 날을 구함
+				var lastDay = new Date(year, month, 0).getDate();
+				return parts[0] + '-' + parts[1] + '-' + ('0' + lastDay).slice(-2);
+			}
+		}
+
+
+		// 타임스탬프를 date로 변환
+		function convertTimestampToDate(timestamp) {
+			// Unix 타임스탬프는 초 단위이므로 밀리초로 변환
+			var date = new Date(timestamp * 1000);
+
+			// 연도, 월, 일을 추출
+			var year = date.getFullYear();
+			var month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1 필요
+			var day = ('0' + date.getDate()).slice(-2);
+
+			// yyyy-mm-dd 형식으로 반환
+			return year + '-' + month + '-' + day;
+		}
+		// 말줄임표 단, 5개 초과할때
+		function renderEventsWithEllipsis() {
+			$('.fc-more-events').remove();
+			$('.fc-daygrid-day').each(function() {
+				var events = $(this).find('.fc-daygrid-event');
+				if (events.length > 5) {
+					events.slice(5).hide();
+					var moreLink = $('<div>').text(` +${events.length - 5} more`).addClass('fc-more-events')
+							//var moreLink = $('<div>').text(`+${events.length - 5} more`).addClass('fc-more-events')
+							.click(function() {
+								events.slice(5).show();
+								$(this).hide();
+							});
+					$(this).children().append(moreLink);
+				}
+			});
+		}
+
+		// 사람인 API 호출
+		function fetchEvents(info, successCallback, failureCallback) {
+			const apiKey = '2cqotQk9IgKxjyaZedgwoeyrZNzNiySaiFyH5fEN5u6p9Oawf7S';
+			var locCd = /*[[ ${sgg} ]]*/;
+			var indCd = 1;
+
+			var published_min = moment(info.startStr).format('YYYY-MM-DD') + ' 00:00:00';
+			var published_max = moment(info.endStr).format('YYYY-MM-DD') + ' 23:59:59';
+
+			fetch('https://oapi.saramin.co.kr/job-search?access-key=' + apiKey + '&loc_cd=' + locCd + '&ind_cd=' + indCd + '&published_min=' + published_min + '&published_max=' + published_max + '&count=110')
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Request failed...');
+						}
+						return response.json();
+					})
+					.then(json => {
+						var eventArr = [];
+						json.jobs.job.forEach(function(data) {
+							let event = {
+								title: data.company.detail.name,
+								start: convertTimestampToDate(data["posting-timestamp"]),
+								url: data.url
+							};
+							eventArr.push(event);
+						});
+
+						successCallback(eventArr);
+					})
+					.catch(error => {
+						console.error('Error fetching events:', error);
+						failureCallback(error);
+					});
 		}
 	</script>
 </th:block>
